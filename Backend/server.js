@@ -21,6 +21,3 @@ App.use("/api/lecturers", lecturerController);
 App.get("/", (req, res) => {
   res.send("API is running...");
 });
-
-const Port = process.env.PORT || 8000;
-App.listen(Port, () => console.log(`Server is running on port ${Port}`));
