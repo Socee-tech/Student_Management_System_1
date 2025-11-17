@@ -28,6 +28,7 @@ export default function MobileBar({ isOpen, OnClose, setActiveTab }) {
                         animate={{ x: isOpen ? '0%' : '-100%' }}
                         transition={{ type: "spring", stiffness: 200, damping: 18 }}
                         className="fixed top-0 left-0 h-full w-64 bg-foreground z-50 flex flex-col p-5"
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="font-bold text-2xl">Menu</h2>
@@ -41,7 +42,7 @@ export default function MobileBar({ isOpen, OnClose, setActiveTab }) {
                                 return (
                                     <nav
                                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[rgba(16,9,112,0.76)] hover:cursor-pointer"
-                                        onClick={() => setActiveTab(it.to)}
+                                        onClick={() => (setActiveTab(it.to), OnClose())}
                                         key={it.label}
                                     >
                                         {Icon && <Icon className="w-4 h-4" />}
