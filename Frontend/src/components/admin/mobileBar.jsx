@@ -21,7 +21,7 @@ export default function MobileBar({ isOpen, OnClose, setActiveTab }) {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={OnClose}
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-101"
                 >
                     <motion.div
                         initial={{ x: '-100%' }}

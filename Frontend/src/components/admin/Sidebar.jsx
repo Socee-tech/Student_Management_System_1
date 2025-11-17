@@ -14,7 +14,7 @@ const items = [
 
 export default function Sidebar({ activeTab }) {
     return (
-        <aside className="sticky hidden md:flex md:flex-col p-4 gap-4 text-white">
+        <aside className="sticky hidden md:flex md:flex-col p-4 gap-4 text-white z-50">
             <div className="text-xl font-bold mb-4">School Admin</div>
 
             <nav className="flex flex-col gap-2">

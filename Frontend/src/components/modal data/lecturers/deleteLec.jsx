@@ -26,7 +26,7 @@ export default function DeleteLec({ lecturer, onClose }) {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 flex items-center justify-center z-101 bg-black/40 backdrop-blur-sm"
             onClick={onClose}
         >
             <motion.div

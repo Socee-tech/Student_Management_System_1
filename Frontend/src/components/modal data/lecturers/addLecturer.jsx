@@ -61,7 +61,7 @@ export default function AddLecturer({ onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={onClose}
-            className="fixed flex inset-0 bg-black/40 backdrop-blur-sm items-center z-50"
+            className="fixed flex inset-0 bg-black/40 backdrop-blur-sm items-center z-101"
         >
             <motion.div
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
