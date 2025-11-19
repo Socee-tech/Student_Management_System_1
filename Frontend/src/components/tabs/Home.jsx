@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { StudentList } from "../modal data/students/Students"
+import StudentList from "../modal data/students/Students"
 import StatCard from "../statCard"
 import { Users, BookOpen, Presentation, BookOpenCheck, UserCheck, SchoolIcon, GraduationCap, Pen, Book, School2Icon, Users2, DollarSign, Layers, TrendingUp } from 'lucide-react'
 

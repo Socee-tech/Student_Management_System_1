@@ -1,22 +1,20 @@
 import { Filter, Hash } from "lucide-react";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
+import UseNotify from "../../../../snackBar/snackBar";
+import API from "../../../API/axios";
 
-
-export const StudentList = ({ onCountChage }) => {
-    const [filter, setFilter] = useState({regNo: '', course: ''});
+export default function StudentList({ onCountChage }) {
+    const { notifyError } = UseNotify();
+    const [filter, setFilter] = useState({ regNo: '', course: '' });
     const [filteredStudents, setFilteredStudents] = useState([]);
-    const students = useMemo(() => [
-        { id: 1, name: 'John Doe', regNo: 'REG123', course: 'Computer Science' },
-        { id: 2, name: 'Jane Smith', regNo: 'REG456', course: 'Mathematics' },
-        { id: 3, name: 'Alice Johnson', regNo: 'REG789', course: 'Physics' },
-    ], []);
+    const [students, setStudents] = useState([]);
     const applyFilters = useCallback(() => {
         let filtered = students;
-        if(filter.regNo) {
-            filtered = filtered.filter( student => student.regNo.toLowerCase().includes(filter.regNo.toLowerCase()));
+        if (filter.regNo) {
+            filtered = filtered.filter(student => student.regNo.toLowerCase().includes(filter.regNo.toLowerCase()));
         }
-        if(filter.course) {
-            filtered = filtered.filter( student => student.course.toLowerCase().includes(filter.course.toLowerCase()));
+        if (filter.course) {
+            filtered = filtered.filter(student => student.course.toLowerCase().includes(filter.course.toLowerCase()));
         }
         setFilteredStudents(filtered);
     }, [students, filter]);
@@ -29,9 +27,23 @@ export const StudentList = ({ onCountChage }) => {
     }, [filter, students, applyFilters]);
 
     const handleFilterChange = (e) => {
-        setFilter({ ...filter, [e.target.id]: e.target.value})
+        setFilter({ ...filter, [e.target.id]: e.target.value })
     }
-
+    useEffect(() => {
+        fetchStudents();
+    }, []);
+    const fetchStudents = async () => {
+        try {
+            const res = await API.get("/students");
+            if (res && res.data) {
+                setStudents(res.data);
+            }
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            notifyError("Failed to fetch students");
+        }
+    }
+    var D = 1;
     return (
         <div className="space-y-4 flex flex-col items-center justify-center bg-foreground p-4 rounded-2xl text-[1rem] md:text-[1.5rem] transition-all">
             <div className="relative flex flex-col overflow-auto md:flex-row gap-2 text-left w-full">
@@ -65,7 +77,7 @@ export const StudentList = ({ onCountChage }) => {
                     <tbody className="">
                         {filteredStudents.map((student) => (
                             <tr key={student.id} className="hover:bg-table-hover text-left border-b">
-                                <td className="border-collapse border-b-primary p-2">{student.id}</td>
+                                <td className="border-collapse border-b-primary p-2">{D++}</td>
                                 <td className="border-collapse border-b-primary p-2">{student.name}</td>
                                 <td className="border-collapse border-b-primary p-2">{student.regNo}</td>
                                 <td className="border-collapse border-b-primary p-2">{student.course}</td>

@@ -5,7 +5,7 @@ import { ViewStudent } from "../modal data/students/viewStudent";
 import AddStudent from "../modal data/students/addStudent";
 import API from "../../API/axios";
 import { useSnackbar } from "notistack";
-
+import students2 from "../modal data/students/Students.jsx";
 
 
 
@@ -152,7 +152,7 @@ export default function Students() {
                                             className="action-btn bg-blue-600"
                                             onClick={() => selectStudent({ student, action: 'view' })}
                                         >View</button>
-                                        
+
                                     </div>
                                 </td>
 

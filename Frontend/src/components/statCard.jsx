@@ -35,15 +35,15 @@ const StatCard = ({ title, value, icon: Icon, extraInfo, No }) => {
                 </div>
 
                 {title === "Students" ? (
-                    <motion.p
+                    <motion.div
                         layout
                         className="text-4xl font-bold text-gray-900 dark:text-white"
-                    >{No}</motion.p>
+                    >{No}</motion.div>
                 ) : (
-                    <motion.p
+                    <motion.div
                         layout
                         className="text-4xl font-bold text-gray-900 dark:text-white"
-                    >{value}</motion.p>
+                    >{value}</motion.div>
                 )}
             </motion.div>
 
@@ -54,7 +54,7 @@ const StatCard = ({ title, value, icon: Icon, extraInfo, No }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
                         onClick={() => setIsOpen(false)}
                     >
                         <motion.div
@@ -83,12 +83,12 @@ const StatCard = ({ title, value, icon: Icon, extraInfo, No }) => {
                             </div>
 
                             <div className="text-center mb-6">
-                                <motion.p
+                                <motion.div
                                     layout
                                     className=""
                                 >
                                     {value}
-                                </motion.p>
+                                </motion.div>
                             </div>
 
                             <div className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
