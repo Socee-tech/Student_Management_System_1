@@ -48,7 +48,7 @@ export default function Students() {
 
     useEffect(() => {
         fetchStudents();
-    }, [modalOpen, selectedStudent]);
+    }, [modalOpen, selectedStudent.delete, selectedStudent.edit]);
 
     const fetchStudents = async () => {
         try {
