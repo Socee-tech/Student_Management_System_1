@@ -5,7 +5,7 @@ import { ViewStudent } from "../modal data/students/viewStudent";
 import AddStudent from "../modal data/students/addStudent";
 import API from "../../API/axios";
 import { useSnackbar } from "notistack";
-import students2 from "../modal data/students/Students.jsx";
+import DotLoader from "../spinner";
 
 
 
@@ -16,7 +16,11 @@ export default function Students() {
     const [modalOpen, setModalOpen] = useState(false);
     const [filter, setFilter] = useState({ name: '', regNo: '', course: '', year: '' });
     const [filteredStudents, setFilteredStudents] = useState([]);
-    const handleClose = () => setSelectedStudent({ edit: '', delete: '', view: '' });
+    const [isLoading, setIsLoading] = useState(false);
+    const handleClose = () => {
+        setSelectedStudent({ edit: '', delete: '', view: '' });
+        fetchStudents();
+    }
     const handleModalClose = () => { setModalOpen(false) };
     const selectStudent = ({ student, action }) => setSelectedStudent({ ...selectedStudent, [action]: student });
     const { enqueueSnackbar } = useSnackbar();
@@ -48,13 +52,15 @@ export default function Students() {
 
     useEffect(() => {
         fetchStudents();
-    }, [modalOpen, selectedStudent.delete, selectedStudent.edit]);
+    }, [modalOpen]);
 
     const fetchStudents = async () => {
         try {
+            setIsLoading(true);
             const res = await API.get("/students");
             if (res && res.data) {
                 setStudents1(res.data);
+                setIsLoading(false);
             }
         } catch (error) {
             console.error("Error fetching students:", error);
@@ -117,7 +123,7 @@ export default function Students() {
             </div>
             <div className="w-full overflow-x-auto">
                 <table className="min-w-full">
-                    <thead>
+                    <thead className="items-center">
                         <tr className="bg-t-bg">
                             <th className="p-2 text-left">#</th>
                             <th className="p-2 text-left">NAME</th>
@@ -160,6 +166,7 @@ export default function Students() {
                         ))}
                     </tbody>
                 </table>
+                {isLoading && <DotLoader />}
                 {selectedStudent.edit && (<EditStudent student={selectedStudent.edit} onClose={handleClose} />)}
                 {selectedStudent.delete && (<DeleteStudent student={selectedStudent.delete} onClose={handleClose} />)}
                 {selectedStudent.view && (<ViewStudent student={selectedStudent.view} onClose={handleClose} />)}

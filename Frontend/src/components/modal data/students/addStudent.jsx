@@ -44,6 +44,12 @@ export default function AddStudent({ onClose }) {
             console.error("Error adding student:", error);
         }
     }
+    const getYear = (dateString) => {
+        const selectedDate = new Date(dateString);
+        const today = new Date();
+        let year = today.getFullYear() - selectedDate.getFullYear();
+        setFormData({ ...formData, year: year });
+    }
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -163,7 +169,10 @@ export default function AddStudent({ onClose }) {
                             <input
                                 name="admDate"
                                 value={formData.admDate}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    getYear(e.target.value);
+                                    handleChange(e);
+                                }}
                                 className="input-field ml-0 p-2"
                                 type="date"
                             />
