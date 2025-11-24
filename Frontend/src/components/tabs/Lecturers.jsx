@@ -4,6 +4,7 @@ import DeleteLec from "../modal data/lecturers/deleteLec";
 import ViewLec from "../modal data/lecturers/viewLec";
 import AddLecturer from "../modal data/lecturers/addLecturer";
 import API from "../../API/axios";
+import DotLoader from "../spinner";
 
 
 
@@ -14,6 +15,7 @@ export const Lecturers = () => {
     const [selectedLec, setSelectedLec] = useState({ edit: '', delete: '', view: '' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [Lecturers, setLecturers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const handleClose1 = () => setIsModalOpen(false);
     const selectLec = ({ lec, action }) => setSelectedLec({ ...selectedLec, [action]: lec });
     const handleClose = () => {
@@ -53,8 +55,10 @@ export const Lecturers = () => {
     }
     const fetchLecturers = async () => {
         try {
+            setIsLoading(true);
             const res = await API.get("/lecturers");
             setLecturers(res.data);
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching lecturers:", error);
         }
@@ -165,6 +169,7 @@ export const Lecturers = () => {
                     </tbody>
                 </table>
             </div>
+            {isLoading && <DotLoader />}
             {selectedLec.edit && (<EditLecturer lecturer={selectedLec.edit} onClose={handleClose} />)}
             {selectedLec.delete && (<DeleteLec lecturer={selectedLec.delete} onClose={handleClose} />)}
             {selectedLec.view && (<ViewLec lecturer={selectedLec.view} onClose={handleClose} />)}

@@ -7,11 +7,12 @@ import DeleteCourse from "../modal data/courses/deleteCourse";
 import AddCourse from "../modal data/courses/addCourse";
 import API from "../../API/axios";
 import UseNotify from "../../../snackBar/snackBar";
-
+import DotLoader from "../spinner";
 
 
 export default function Courses() {
-    const { notifySuccess, notifyError } = UseNotify();
+    const { notifyError } = UseNotify();
+    const [isLoading, setIsLoading] = useState(false);
     const [courses1, setCourses1] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState({ edit: '', delete: '' });
     const selectCourse = ({ course, action }) => setSelectedCourse({ ...selectedCourse, [action]: course });
@@ -43,9 +44,11 @@ export default function Courses() {
     }, [modalOpen, selectedCourse.edit, selectedCourse.delete]);
     const fetchCourses = async () => {
         try {
+            setIsLoading(true);
             const res = await API.get("/courses");
             if (res && res.data) {
-                setCourses1(res.data);;
+                setCourses1(res.data);
+                setIsLoading(false);
             } else {
                 notifyError("Failed to fetch courses");
             }
@@ -115,6 +118,7 @@ export default function Courses() {
                         ))}
                     </tbody>
                 </table>
+                {isLoading && <DotLoader />}
                 {selectedCourse.edit && (<EditCourse course={selectedCourse.edit} onclose={handleClose} />)}
                 {selectedCourse.delete && (<DeleteCourse course={selectedCourse.delete} onCLose={handleClose} />)}
                 {modalOpen && (<AddCourse onClose={handleModalClose} />)}
