@@ -51,7 +51,7 @@ export default function Home() {
                         value={count.lectNo}
                         icon={Users2}
                     />
-                    <StatCard title="Classes"
+                    <StatCard title="Courses"
                         value={count.courseNo}
                         icon={Presentation}
                     />

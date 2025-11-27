@@ -22,7 +22,6 @@ const StatCard = ({ title, value, icon: Icon }) => {
             {/* 🔹 Compact Card */}
             <motion.div
                 layout
-                onClick={() => setIsOpen(true)}
                 className="dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg cursor-pointer p-2 relative overflow-hidden"
                 whileHover={{ scale: 1.02 }}
             >
