@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
-import StudentList from "../modal data/students/Students"
 import StatCard from "../statCard"
 import { Users, BookOpen, Presentation, BookOpenCheck, UserCheck, SchoolIcon, GraduationCap, Pen, Book, School2Icon, Users2, DollarSign, Layers, TrendingUp } from 'lucide-react'
 import API from "../../API/axios";
 import UseNotify from "../../../snackBar/snackBar";
 
-
-export default function Home() {
+export default function Home({ isMenuOpen }) {
     const { notifyError } = UseNotify();
     const [count, setCount] = useState({ studNo: "", lectNo: "", courseNo: "" });
     const fetchCount = async () => {
@@ -43,17 +41,20 @@ export default function Home() {
                     <h2 className='text-xl font-semibold'>"Transforming lives through quality education"</h2>
                 </div>
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 flex-1 w-full">
-                    <StatCard title="Students"
+                    <StatCard title="students"
                         value={count.studNo}
                         icon={Users}
+                        onClick={isMenuOpen}
                     />
-                    <StatCard title="Lecturers"
+                    <StatCard title="lecturers"
                         value={count.lectNo}
                         icon={Users2}
+                        onClick={isMenuOpen}
                     />
-                    <StatCard title="Courses"
+                    <StatCard title="courses"
                         value={count.courseNo}
                         icon={Presentation}
+                        onClick={isMenuOpen}
                     />
                     <StatCard title="Active classes"
                         value="42"

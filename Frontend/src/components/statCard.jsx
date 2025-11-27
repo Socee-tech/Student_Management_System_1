@@ -2,26 +2,26 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const StatCard = ({ title, value, icon: Icon }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const StatCard = ({ title, value, icon: Icon, onClick }) => {
     // Prevent background scrolling when modal is open
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
+    // useEffect(() => {
+    //     if (isOpen) {
+    //         document.body.style.overflow = "hidden";
+    //     } else {
+    //         document.body.style.overflow = "auto";
+    //     }
 
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, [isOpen]);
+    //     return () => {
+    //         document.body.style.overflow = "auto";
+    //     };
+    // }, [isOpen]);
 
     return (
         <>
             {/* 🔹 Compact Card */}
             <motion.div
                 layout
+                onClick={() => onClick(title)}
                 className="dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg cursor-pointer p-2 relative overflow-hidden"
                 whileHover={{ scale: 1.02 }}
             >
