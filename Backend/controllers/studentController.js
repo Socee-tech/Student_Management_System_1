@@ -44,8 +44,7 @@ Router.get("/", async (req, res) => {
   try {
     if (req.body) {
       try {
-        const { regNo } = req.body;
-        const student = await Student.findOne({ regNo });
+        const student = await Student.find({});
         return res.status(200).json(student);
       } catch (error) {
         return res.status(500).json(error.message);
@@ -53,6 +52,15 @@ Router.get("/", async (req, res) => {
     }
     const students = await Student.find({});
     return res.status(200).json(students);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
+Router.get("/count", async (req, res) => {
+  try {
+    const count = await Student.countDocuments();
+    return res.status(200).json({ count });
   } catch (error) {
     return res.status(500).json(error.message);
   }

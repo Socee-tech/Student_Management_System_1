@@ -19,6 +19,14 @@ Router.get("/", async (req, res) => {
     return res.status(500).json(error.message);
   }
 });
+Router.get("/count", async (req, res) => {
+  try {
+    const count = await Lecturer.countDocuments();
+    return res.status(200).json({ count });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
 Router.get("/:LecID", async (req, res) => {
   try {
     const lecturer = await Lecturer.findOne({
