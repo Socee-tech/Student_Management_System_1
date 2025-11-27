@@ -1,9 +1,8 @@
 // src/components/StatCard.jsx
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { motion } from "framer-motion";
 
-const StatCard = ({ title, value, icon: Icon, extraInfo, No }) => {
+const StatCard = ({ title, value, icon: Icon }) => {
     const [isOpen, setIsOpen] = useState(false);
     // Prevent background scrolling when modal is open
     useEffect(() => {
@@ -34,70 +33,11 @@ const StatCard = ({ title, value, icon: Icon, extraInfo, No }) => {
                     {Icon && <Icon className="text-indigo-500 w-6 h-6" />}
                 </div>
 
-                {title === "Students" ? (
-                    <motion.div
-                        layout
-                        className="text-4xl font-bold text-gray-900 dark:text-white"
-                    >{No}</motion.div>
-                ) : (
-                    <motion.div
-                        layout
-                        className="text-4xl font-bold text-gray-900 dark:text-white"
-                    >{value}</motion.div>
-                )}
+                <motion.div
+                    layout
+                    className="text-4xl font-bold text-gray-900 dark:text-white"
+                >{value}</motion.div>
             </motion.div>
-
-            {/* 🔹 Expanded Modal Card */}
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        <motion.div
-                            layout
-                            onClick={(e) => e.stopPropagation()}
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.8, opacity: 0 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 200,
-                                damping: 20,
-                            }}
-                            className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 w-[90%] max-w-6xl max-h-[90vh] overflow-hidden flex flex-col"
-                        >
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-                                    {title}
-                                </h2>
-                                <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300"
-                                >
-                                    <X size={22} />
-                                </button>
-                            </div>
-
-                            <div className="text-center mb-6">
-                                <motion.div
-                                    layout
-                                    className=""
-                                >
-                                    {value}
-                                </motion.div>
-                            </div>
-
-                            <div className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                                {extraInfo || "No additional information available."}
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </>
     );
 };

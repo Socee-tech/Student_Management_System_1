@@ -1,12 +1,36 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import StudentList from "../modal data/students/Students"
 import StatCard from "../statCard"
 import { Users, BookOpen, Presentation, BookOpenCheck, UserCheck, SchoolIcon, GraduationCap, Pen, Book, School2Icon, Users2, DollarSign, Layers, TrendingUp } from 'lucide-react'
-
+import API from "../../API/axios";
+import UseNotify from "../../../snackBar/snackBar";
 
 
 export default function Home() {
-    const [studNo, setStudNo] = useState(0);
+    const { notifyError } = UseNotify();
+    const [count, setCount] = useState({ studNo: "", lectNo: "", courseNo: "" });
+    const fetchCount = async () => {
+        try {
+            const countStudent = await API.get("/students/count");
+            if (countStudent && countStudent.data) {
+                setCount(prev => ({ ...prev, studNo: countStudent.data.count }));
+            }
+            const countLecturer = await API.get("/lecturers/count");
+            if (countLecturer && countLecturer.data) {
+                setCount(prev => ({ ...prev, lectNo: countLecturer.data.count }));
+            }
+            const countCourse = await API.get("/courses/count");
+            if (countCourse && countCourse.data) {
+                setCount(prev => ({ ...prev, courseNo: countCourse.data.count }));
+            }
+        } catch (error) {
+            console.error("Error fetching student count:", error);
+            notifyError("Failed to fetch student count");
+        }
+    }
+    useEffect(() => {
+        fetchCount();
+    }, []);
     return (
         <div className="space-y-4">
             <div className='flex flex-col sm:flex-col lg:flex-row sm:items-center sm:justify-between gap-2'>
@@ -20,45 +44,40 @@ export default function Home() {
                 </div>
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 flex-1 w-full">
                     <StatCard title="Students"
-                        value={<StudentList onCountChage={setStudNo}/>}
+                        value={count.studNo}
                         icon={Users}
-                        No={studNo}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Lecturers"
-                        value="78"
+                        value={count.lectNo}
+                        icon={Users2}
+                    />
+                    <StatCard title="Classes"
+                        value={count.courseNo}
                         icon={Presentation}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Active classes"
                         value="42"
                         icon={BookOpenCheck}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Attendance Today"
                         value="92%"
                         icon={UserCheck}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Debtors"
                         value="500"
                         icon={DollarSign}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Courses"
                         value="267"
                         icon={BookOpen}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Departments"
                         value="20"
                         icon={Layers}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
                     <StatCard title="Performance"
                         value="70%"
                         icon={TrendingUp}
-                        extraInfo="There are currently 1,245 active students enrolled across all departments."
                     />
 
                 </section>
