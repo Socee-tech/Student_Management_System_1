@@ -1,25 +1,80 @@
-import { motion } from "framer-motion"
+import { motion as Motion } from "framer-motion"
 import { Book, Calendar, Mail, Phone, User, X } from "lucide-react"
 import { useState } from "react"
 import API from "../../../API/axios";
 import UseNotify from "../../../../snackBar/snackBar";
+import Select from "react-select";
+import { useEffect } from "react";
 
 
 
 
-export const EditStudent = ({ student, onClose }) => {
+export const EditStudent = ({ student, onClose, refresh }) => {
     const [formData, setFormData] = useState({
         name: student.name,
-        course: student.course,
+        department: "",
         year: student.year,
         admDate: student.admDate,
         gender: student.gender,
         email: student.email,
         phone: student.phone,
     });
+    const [departments, setDepartments] = useState([]);
+    const [dpt, setDpt] = useState(student.department.name || "");
     const { notifySuccess, notifyError } = UseNotify();
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
+    }
+    useEffect(() => {
+        fetchDepartments();
+    }, []);
+
+    const fetchDepartments = async () => {
+        try {
+            const res = await API.get('/departments');
+            const deptOptions = res.data.map((dept) => ({
+                value: dept._id,
+                label: dept.name
+            }));
+            setDepartments(deptOptions);
+
+            const defaultDeptId = deptOptions.find(d => d.label === student.department.name)?.value || '';
+            setFormData(prev => ({
+                ...prev,
+                department: prev.department || defaultDeptId
+            }));
+        } catch (error) {
+            console.error("error fetching departments", error);
+        }
+    }
+    const handleDepartmentChange = (selectedOption) => {
+        setFormData({
+            ...formData,
+            department: selectedOption ? selectedOption.value : ''
+        });
+        setDpt(selectedOption ? selectedOption.label : '');
+    };
+    function calculateYear(admData) {
+        if (!admData) return null;
+
+        const admDate = new Date(admData);
+        const today = new Date();
+
+        let yearDiff = today.getFullYear() - admDate.getFullYear();
+
+        const hasReachedAniversary = today.getMonth() > admDate.getMonth() ||
+            (today.getMonth() === admDate.getMonth() && today.getDate() >= admDate.getDate());
+
+        if (!hasReachedAniversary) {
+            yearDiff -= 1;
+        }
+
+        return Math.max(yearDiff + 1, 1);
+    }
+    const handleDateChange = (e) => {
+        const date = e.target.value;
+        const year = calculateYear(date);
+        setFormData({ ...formData, year: year, admDate: date });
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,6 +82,7 @@ export const EditStudent = ({ student, onClose }) => {
         try {
             const res = await API.put(`/students/${encodeURIComponent(student.regNo)}`, formData);
             if (res) {
+                refresh((prev) => !prev);
                 notifySuccess("Student updated successfully");
                 onClose();
             } else {
@@ -37,13 +93,13 @@ export const EditStudent = ({ student, onClose }) => {
         }
     };
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
-            <motion.div
+            <Motion.div
                 onClick={(e) => e.stopPropagation()}
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -73,15 +129,17 @@ export const EditStudent = ({ student, onClose }) => {
                     <div className="flex flex-col">
                         <div className="flex text-left">
                             <Book size={16} />
-                            <label htmlFor="course" className="text-sm">Course:</label>
+                            <label htmlFor="department" className="text-sm">Department:</label>
                         </div>
-                        <input
-                            type="text"
-                            id="course"
-                            className="input-field ml-0 p-2"
-                            value={formData.course}
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <Select
+                                name="department"
+                                value={departments.filter(dept => dpt === dept.label)}
+                                options={departments}
+                                onChange={handleDepartmentChange}
+                                className="text-left text-black"
+                            />
+                        </div>
                     </div>
                     <div className="flex flex-col">
                         <div className="flex text-left">
@@ -94,6 +152,7 @@ export const EditStudent = ({ student, onClose }) => {
                             className="input-field ml-0 p-2"
                             value={formData.year}
                             onChange={handleChange}
+                            readOnly
                         />
                     </div>
                     <div className="flex flex-col">
@@ -119,7 +178,7 @@ export const EditStudent = ({ student, onClose }) => {
                             id="admDate"
                             className="input-field ml-0 p-2 text-[1.2rem]"
                             value={formData.admDate}
-                            onChange={handleChange}
+                            onChange={handleDateChange}
                         />
                     </div>
                     <div className="flex flex-col">
@@ -153,7 +212,7 @@ export const EditStudent = ({ student, onClose }) => {
                         <button className="action-accept hover:cursor-pointer" onClick={handleSubmit}>Save</button>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

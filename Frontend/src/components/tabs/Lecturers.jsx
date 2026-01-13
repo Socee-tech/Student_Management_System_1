@@ -1,15 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import EditLecturer from "../modal data/lecturers/editLecturer";
 import DeleteLec from "../modal data/lecturers/deleteLec";
 import ViewLec from "../modal data/lecturers/viewLec";
 import AddLecturer from "../modal data/lecturers/addLecturer";
 import API from "../../API/axios";
 import DotLoader from "../spinner";
+import UseNotify from "../../../snackBar/snackBar";
 
 
 
 
 export const Lecturers = () => {
+    const { notifyError } = UseNotify();
+    const [refresh, setRefresh] = useState(false);
     const [filter, setFilter] = useState({ id: '', name: '', department: '', email: '', phone: '' });
     const [filteredLecs, setFilteredLecs] = useState([]);
     const [selectedLec, setSelectedLec] = useState({ edit: '', delete: '', view: '' });
@@ -21,13 +24,6 @@ export const Lecturers = () => {
     const handleClose = () => {
         setSelectedLec({ edit: '', delete: '', view: '' });
     }
-    // const Lecturers = useMemo(() => [
-    //     { LecID: 'L001', name: 'Dr. John Smith', department: 'Computer Science', email: 'john@example.com', phone: '1234567890', status: 'Active', courses: ['Programming', 'Data Structures'] },
-    //     { LecID: 'L002', name: 'Prof. Jane Doe', department: 'Mathematics', email: 'jane@example.com', phone: '0987654321', status: 'Inactive', courses: ['Calculus', 'Linear Algebra'] },
-    //     { LecID: 'L003', name: 'Dr. Alice Johnson', department: 'Physics', email: 'alice@example.com', phone: '5678901234', status: 'Active', courses: ['Quantum Mechanics', 'Thermodynamics'] },
-    //     { LecID: 'L004', name: 'Prof. Bob Brown', department: 'Chemistry', email: 'bob@example.com', phone: '9876543210', status: 'Active', courses: ['Organic Chemistry', 'Inorganic Chemistry'] },
-    //     { LecID: 'L005', name: 'Dr. Charlie Green', department: 'Biology', email: 'charlie@example.com', phone: '4567890123', status: 'Inactive', courses: ['Cell Biology', 'Genetics'] }
-    // ], [])
     const applyFilters = useCallback(() => {
         let filtered = Lecturers;
         if (filter.name) {
@@ -56,16 +52,18 @@ export const Lecturers = () => {
     const fetchLecturers = async () => {
         try {
             setIsLoading(true);
-            const res = await API.get("/lecturers");
+            const res = await API.get("/lecturers/dpt");
             setLecturers(res.data);
-            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching lecturers:", error);
+            notifyError("Failed to fetch students");
+        } finally {
+            setIsLoading(false);
         }
     };
     useEffect(() => {
         fetchLecturers();
-    }, [isModalOpen, selectedLec.delete, selectedLec.edit]);
+    }, [refresh]);
     return (
         <div className="flex flex-col gap-4 p-4">
             <div className="flex justify-between items-center">
@@ -144,7 +142,7 @@ export const Lecturers = () => {
                             <tr key={lec.LecID} className="odd:bg-t-odd hover:bg-t-hover">
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.LecID}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.name}</td>
-                                <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.department}</td>
+                                <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.department.name ? lec.department.name : "No department assigned"}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.email}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.phone}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{lec.status}</td>
@@ -170,10 +168,10 @@ export const Lecturers = () => {
                 </table>
             </div>
             {isLoading && <DotLoader />}
-            {selectedLec.edit && (<EditLecturer lecturer={selectedLec.edit} onClose={handleClose} />)}
-            {selectedLec.delete && (<DeleteLec lecturer={selectedLec.delete} onClose={handleClose} />)}
+            {selectedLec.edit && (<EditLecturer lecturer={selectedLec.edit} refresh={setRefresh} onClose={handleClose} />)}
+            {selectedLec.delete && (<DeleteLec lecturer={selectedLec.delete} refresh={setRefresh} onClose={handleClose} />)}
             {selectedLec.view && (<ViewLec lecturer={selectedLec.view} onClose={handleClose} />)}
-            {isModalOpen && (<AddLecturer onClose={handleClose1} />)}
+            {isModalOpen && (<AddLecturer refresh={setRefresh} onClose={handleClose1} />)}
         </div>
     )
 }

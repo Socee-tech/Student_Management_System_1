@@ -1,5 +1,5 @@
 import { motion as Motion } from "framer-motion";
-import { House, Mail, PercentIcon, Phone, User, X } from "lucide-react";
+import { User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import API from "../../../API/axios";
 
@@ -7,7 +7,7 @@ import API from "../../../API/axios";
 
 
 
-export default function ViewLec({ lecturer, onClose }) {
+export default function ViewDepartment({ department, onClose }) {
     const [courses, setCourses] = useState([]);
     const fetchCourses = async () => {
         try {
@@ -24,6 +24,7 @@ export default function ViewLec({ lecturer, onClose }) {
     useEffect(() => {
         fetchCourses();
     }, []);
+
     return (
         <Motion.div
             initial={{ opacity: 0 }}
@@ -41,50 +42,20 @@ export default function ViewLec({ lecturer, onClose }) {
             >
                 <div className="flex flex-col p-4 space-y-4">
                     <div className="flex justify-between">
-                        <h3 className="text-3xl font-bold">Lecturer Details</h3>
+                        <h3 className="text-3xl font-bold">Department Details</h3>
                         <X className="w-6 h-6 hover:cursor-pointer" onClick={onClose} />
                     </div>
-                    <div className="text-2xl font-semibold">{lecturer.LecID} - {lecturer.name}</div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="text-2xl font-semibold">{department.code} - {department.name}</div>
+                    <div className="grid grid-cols-1 gap-4">
                         <div className="flex border p-2 rounded-2xl md:border-r-0">
                             <User size={16} />
-                            <span className="text-lg font-bold mr-2">Name:</span>
-                            {lecturer.name}
-                        </div>
-                        <div className="flex border p-2 rounded-2xl md:border-r-0">
-                            <User size={16} />
-                            <span className="text-lg font-bold mr-2">Gender:</span>
-                            {lecturer.gender}
-                        </div>
-                        <div className="flex border md:border-l-0 p-2 rounded-2xl">
-                            <PercentIcon size={16} />
-                            <span className="text-lg font-bold mr-2">Status:</span>
-                            {lecturer.status}
-                        </div>
-                        <div className="flex border p-2 rounded-2xl md:border-r-0">
-                            <User size={16} />
-                            <span className="text-lg font-bold mr-2">Lecturer ID:</span>
-                            {lecturer.LecID}
-                        </div>
-                        <div className="flex border md:border-l-0 p-2 rounded-2xl">
-                            <House size={16} />
-                            <span className="text-lg font-bold mr-2">Department:</span>
-                            {lecturer.department.name}
-                        </div>
-                        <div className="flex border p-2 rounded-2xl md:border-r-0">
-                            <Mail size={16} />
-                            <span className="text-lg font-bold mr-2">Email:</span>
-                            {lecturer.email}
-                        </div>
-                        <div className="flex border md:border-l-0 p-2 rounded-2xl">
-                            <Phone size={16} />
-                            <span className="text-lg font-bold mr-2">Phone:</span>
-                            {lecturer.phone}
+                            <span className="text-lg font-bold mr-2">H.O.D:</span>
+                            {department.hod.name}
                         </div>
                     </div>
                     <div className="w-full flex flex-col p-4 text-left space-y-3">
                         <h2 className="text-xl font-semibold">Courses:</h2>
-                        {lecturer.courses.map((course, idx) => {
+                        {department.courses.map((course, idx) => {
                             const courseLabel = courses.find((c) => c.value === course)?.label;
                             return (
                                 <ul className="flex flex-row gap-2">

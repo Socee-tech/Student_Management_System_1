@@ -1,33 +1,56 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { BookA, Calendar1Icon, Mail, PersonStanding, PhoneCall, Timer, User, X } from "lucide-react";
 import { useState } from "react";
 import API from "../../../API/axios";
 import UseNotify from "../../../../snackBar/snackBar";
-export default function AddStudent({ onClose }) {
+import Select from "react-select";
+export default function AddStudent({ onClose, refresh }) {
     const { notifySuccess, notifyError } = UseNotify();
+    const [departments, setDepartments] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
         regNo: "",
-        course: "",
+        department: "",
         year: "",
         gender: "",
         email: "",
         phone: "",
         admDate: "",
-    })
+    });
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
+    const fetchDepartments = async () => {
+        try {
+            const res = await API.get('/departments');
+            const deptOptions = res.data.map((dept) => ({
+                value: dept._id,
+                label: dept.name
+            }));
+            setDepartments(deptOptions);
+        } catch (error) {
+            console.error("error fetching departments", error);
+        }
+    }
+    const handleDepartmentChange = (selectedOption) => {
+        setFormData({
+            ...formData,
+            department: selectedOption ? selectedOption.value : ''
+        });
+    };
+
+
     const handleSubmitt = async (e) => {
         e.preventDefault();
         try {
             const res = await API.post("/students", formData);
             if (res) {
+                refresh((prev) => !prev);
                 notifySuccess("Student added successfully");
                 setFormData({
                     name: "",
                     regNo: "",
-                    course: "",
+                    department: "",
                     year: "",
                     gender: "",
                     email: "",
@@ -44,20 +67,36 @@ export default function AddStudent({ onClose }) {
             console.error("Error adding student:", error);
         }
     }
-    const getYear = (dateString) => {
-        const selectedDate = new Date(dateString);
+    function calculateYear(admData) {
+        if (!admData) return null;
+
+        const admDate = new Date(admData);
         const today = new Date();
-        let year = today.getFullYear() - selectedDate.getFullYear();
-        setFormData({ ...formData, year: year });
+
+        let yearDiff = today.getFullYear() - admDate.getFullYear();
+
+        const hasReachedAniversary = today.getMonth() > admDate.getMonth() ||
+            (today.getMonth() === admDate.getMonth() && today.getDate() >= admDate.getDate());
+
+        if (!hasReachedAniversary) {
+            yearDiff -= 1;
+        }
+
+        return Math.max(yearDiff + 1, 1);
+    }
+    const handleDateChange = (e) => {
+        const date = e.target.value;
+        const year = calculateYear(date);
+        setFormData({ ...formData, year: year, admDate: date });
     }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
-            <motion.div
+            <Motion.div
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
@@ -66,10 +105,10 @@ export default function AddStudent({ onClose }) {
             >
                 <div className="space-y-4 p-5">
                     <div className="flex justify-between">
-                        <div className="font-extrabold">Add New Student</div>
+                        <div className="font-semibold text-2xl underline">Add New Student</div>
                         <div className="hover:cursor-pointer" onClick={onClose}><X size={24} /></div>
                     </div>
-                    <div className="font-semibold">Enter student details below</div>
+                    <div className="font-semibold">Enter student details below:</div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                         <div className="flex flex-col">
                             <div className="flex flex-row">
@@ -100,15 +139,16 @@ export default function AddStudent({ onClose }) {
                         <div className="flex flex-col">
                             <div className="flex flex-row">
                                 <BookA size={16} />
-                                <label htmlFor="name">Course:</label>
+                                <label htmlFor="name">Department:</label>
                             </div>
-                            <input
-                                name="course"
-                                value={formData.course}
-                                onChange={handleChange}
-                                className="input-field ml-0 p-2"
-                                type="text"
-                            />
+                            <div>
+                                <Select
+                                    options={departments}
+                                    onFocus={fetchDepartments}
+                                    onChange={handleDepartmentChange}
+                                    className="text-left text-black"
+                                />
+                            </div>
                         </div><div className="flex flex-col">
                             <div className="flex flex-row">
                                 <Timer size={16} />
@@ -120,6 +160,7 @@ export default function AddStudent({ onClose }) {
                                 onChange={handleChange}
                                 className="input-field ml-0 p-2"
                                 type="text"
+                                readOnly
                             />
                         </div>
                         <div className="flex flex-col">
@@ -127,13 +168,18 @@ export default function AddStudent({ onClose }) {
                                 <PersonStanding size={16} />
                                 <label htmlFor="name">Gender:</label>
                             </div>
-                            <input
+                            <select
                                 name="gender"
                                 value={formData.gender}
                                 onChange={handleChange}
                                 className="input-field ml-0 p-2"
                                 type="text"
-                            />
+                            >
+                                <option value="--select--" className="select-bg">--select--</option>
+                                <option value="Male" className="select-bg">Male</option>
+                                <option value="Female" className="select-bg">Female</option>
+                                <option value="Other" className="select-bg">Other</option>
+                            </select>
                         </div>
                         <div className="flex flex-col">
                             <div className="flex flex-row">
@@ -169,24 +215,23 @@ export default function AddStudent({ onClose }) {
                             <input
                                 name="admDate"
                                 value={formData.admDate}
-                                onChange={(e) => {
-                                    getYear(e.target.value);
-                                    handleChange(e);
-                                }}
+                                onChange={handleDateChange}
                                 className="input-field ml-0 p-2"
                                 type="date"
                             />
                         </div>
                     </div>
                     <div className="space-x-4">
-                        <button className="p-2 bg-gray-400 rounded-2xl text-black font-bold text-lg hover:cursor-pointer">cancel</button>
+                        <button
+                            onClick={onClose}
+                            className="p-2 bg-gray-400 rounded-2xl text-black font-bold text-lg hover:cursor-pointer">cancel</button>
                         <button
                             onClick={handleSubmitt}
                             className="p-2 bg-green-400 rounded-2xl text-black font-bold text-lg hover:cursor-pointer">submitt</button>
                     </div>
 
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

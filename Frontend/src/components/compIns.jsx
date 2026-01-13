@@ -1,15 +1,15 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { X } from "lucide-react";
 
 
 
 export default function CompIns({ component, onClose }) {
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
             <div
@@ -22,6 +22,6 @@ export default function CompIns({ component, onClose }) {
                 </div>
                 {component}
             </div>
-        </motion.div>
+        </Motion.div>
     )
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { EditStudent } from "../modal data/students/editStudent";
 import { DeleteStudent } from "../modal data/students/deleteStudent";
 import { ViewStudent } from "../modal data/students/viewStudent";
@@ -6,20 +6,22 @@ import AddStudent from "../modal data/students/addStudent";
 import API from "../../API/axios";
 import { useSnackbar } from "notistack";
 import DotLoader from "../spinner";
+import UseNotify from "../../../snackBar/snackBar";
 
 
 
 
 export default function Students() {
+    const { notifyError } = UseNotify();
     const [selectedStudent, setSelectedStudent] = useState({ edit: '', delete: '', view: '' });
     const [students1, setStudents1] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [filter, setFilter] = useState({ name: '', regNo: '', course: '', year: '' });
+    const [filter, setFilter] = useState({ name: '', regNo: '', department: '', year: '' });
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const handleClose = () => {
         setSelectedStudent({ edit: '', delete: '', view: '' });
-        fetchStudents();
     }
     const handleModalClose = () => { setModalOpen(false) };
     const selectStudent = ({ student, action }) => setSelectedStudent({ ...selectedStudent, [action]: student });
@@ -37,8 +39,8 @@ export default function Students() {
         if (filter.regNo) {
             filtered = filtered.filter(student => student.regNo.toLowerCase().includes(filter.regNo.toLowerCase()));
         }
-        if (filter.course) {
-            filtered = filtered.filter(student => student.course.toLowerCase().includes(filter.course.toLowerCase()));
+        if (filter.department) {
+            filtered = filtered.filter(student => (student.department || '').toLowerCase().includes(filter.department.toLowerCase()));
         }
         if (filter.year) {
             filtered = filtered.filter(student => student.year.toString().toLowerCase().includes(filter.year.toLowerCase()));
@@ -50,23 +52,23 @@ export default function Students() {
         applyFilters();
     }, [filter, students, applyFilters]);
 
-    useEffect(() => {
-        fetchStudents();
-    }, [modalOpen]);
-
     const fetchStudents = async () => {
         try {
             setIsLoading(true);
             const res = await API.get("/students");
             if (res && res.data) {
                 setStudents1(res.data);
-                setIsLoading(false);
             }
         } catch (error) {
             console.error("Error fetching students:", error);
-            enqueueSnackbar("Failed to fetch students", { variant: "error" });
+            notifyError("Failed to fetch students");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
+    useEffect(() => {
+        fetchStudents();
+    }, [refresh]);
     var ID = 1;
 
     return (
@@ -100,11 +102,11 @@ export default function Students() {
                     />
                 </div>
                 <div className="flex">
-                    <label htmlFor="course" className="text-sm">Filter by course:</label>
+                    <label htmlFor="department" className="text-sm">Filter by department:</label>
                     <input
-                        id="course"
+                        id="department"
                         type="text"
-                        value={filter.course}
+                        value={filter.department}
                         onChange={handleChange}
                         className="input-field"
                     />
@@ -128,7 +130,7 @@ export default function Students() {
                             <th className="p-2 text-left">#</th>
                             <th className="p-2 text-left">NAME</th>
                             <th className="p-2 text-left">REG NO</th>
-                            <th className="p-2 text-left">COURSE</th>
+                            <th className="p-2 text-left">DEPARTMENT</th>
                             <th className="p-2 text-left">YEAR</th>
                             <th className="p-2 text-left">ACTIONS</th>
                         </tr>
@@ -139,7 +141,7 @@ export default function Students() {
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{ID++}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{student.name}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{student.regNo}</td>
-                                <td className="border-0 p-2 text-left border-b-2 border-b-primary">{student.course}</td>
+                                <td className="border-0 p-2 text-left border-b-2 border-b-primary">{student.department.name}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">{student.year}</td>
                                 <td className="border-0 p-2 text-left border-b-2 border-b-primary">
                                     <div className="flex">
@@ -167,10 +169,10 @@ export default function Students() {
                     </tbody>
                 </table>
                 {isLoading && <DotLoader />}
-                {selectedStudent.edit && (<EditStudent student={selectedStudent.edit} onClose={handleClose} />)}
-                {selectedStudent.delete && (<DeleteStudent student={selectedStudent.delete} onClose={handleClose} />)}
+                {selectedStudent.edit && (<EditStudent student={selectedStudent.edit} refresh={setRefresh} onClose={handleClose} />)}
+                {selectedStudent.delete && (<DeleteStudent student={selectedStudent.delete} refresh={setRefresh} onClose={handleClose} />)}
                 {selectedStudent.view && (<ViewStudent student={selectedStudent.view} onClose={handleClose} />)}
-                {modalOpen && (<AddStudent onClose={handleModalClose} />)}
+                {modalOpen && (<AddStudent refresh={setRefresh} onClose={handleModalClose} />)}
             </div>
         </div>
     )

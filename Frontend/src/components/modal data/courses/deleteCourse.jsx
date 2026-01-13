@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { X } from "lucide-react";
 import API from "../../../API/axios";
 import UseNotify from "../../../../snackBar/snackBar";
@@ -7,12 +7,13 @@ import UseNotify from "../../../../snackBar/snackBar";
 
 
 
-export default function DeleteCourse({ course, onCLose }) {
+export default function DeleteCourse({ course, onCLose, refresh }) {
     const { notifySuccess, notifyError } = UseNotify();
     const handleDelete = async () => {
         try {
             const res = await API.delete(`/courses/${course.code}`);
             if (res && res.data) {
+                refresh((prev) => !prev);
                 notifySuccess("Course deleted successfully");
                 onCLose();
             } else {
@@ -24,13 +25,13 @@ export default function DeleteCourse({ course, onCLose }) {
         }
     }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onCLose}
         >
-            <motion.div
+            <Motion.div
                 onClick={(e) => e.stopPropagation()}
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -64,7 +65,7 @@ export default function DeleteCourse({ course, onCLose }) {
                         </button>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

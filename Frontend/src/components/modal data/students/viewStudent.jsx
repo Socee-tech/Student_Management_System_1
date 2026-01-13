@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion as Motion } from "framer-motion"
 import { Book, Calendar, CalendarArrowDown, Mail, Phone, User, X } from "lucide-react"
 
 
@@ -7,13 +7,13 @@ import { Book, Calendar, CalendarArrowDown, Mail, Phone, User, X } from "lucide-
 
 export const ViewStudent = ({ student, onClose }) => {
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
-            <motion.div
+            <Motion.div
                 onClick={(e) => e.stopPropagation()}
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -37,13 +37,13 @@ export const ViewStudent = ({ student, onClose }) => {
                             <li><span className="font-bold"><Phone /> Phone:</span> {student.phone}</li>
                             <li><span className="font-bold"><Book /> Reg No:</span> {student.regNo}</li>
                             <li><span className="font-bold"><User /> Gender:</span> {student.gender}</li>
-                            <li><span className="font-bold"><Book /> Course:</span> {student.course}</li>
+                            <li><span className="font-bold"><Book /> Department:</span> {student.department.name}</li>
                             <li><span className="font-bold"><CalendarArrowDown />Year:</span> {student.year}</li>
                             <li><span className="font-bold"><Calendar /> Date enrolled:</span> {student.admDate}</li>
                         </ul>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

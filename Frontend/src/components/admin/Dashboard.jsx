@@ -6,6 +6,11 @@ import Students from "../tabs/Students";
 import { Lecturers } from "../tabs/Lecturers";
 import Courses from "../tabs/courses";
 import MobileBar from "./mobileBar";
+import Departments from "../tabs/departments";
+import Classes from "../tabs/Classes";
+import Attendance from "../tabs/Attendance";
+import Reports from "../tabs/Reports";
+import Settings from "../tabs/Settings";
 
 export default function Dashboard({ Tab }) {
   const [activeTab, setActiveTab] = useState('home');
@@ -21,8 +26,8 @@ export default function Dashboard({ Tab }) {
   return (
     <div className="min-h-screen bg-background-alt text-primary flex p-4">
       <Topbar isMenuOpen={setIsMenuOpen} />
-      <Sidebar activeTab={setActiveTab} />
-      <MobileBar isOpen={isMenuOpen} OnClose={handleClose} setActiveTab={setActiveTab} />
+      <Sidebar setActiveTab={setActiveTab} currentTab={activeTab} />
+      <MobileBar isOpen={isMenuOpen} OnClose={handleClose} setActiveTab={setActiveTab} currentTab={activeTab} />
 
       <div className='w-full bg-foreground flex flex-1 flex-col p-0 rounded-xl mt-[4rem]'>
         <main className="md:p-6">
@@ -30,6 +35,11 @@ export default function Dashboard({ Tab }) {
           {activeTab === 'students' && <Students />}
           {activeTab === 'lecturers' && <Lecturers />}
           {activeTab === 'courses' && <Courses />}
+          {activeTab === 'departments' && <Departments />}
+          {activeTab === 'classes' && <Classes />}
+          {activeTab === 'attendance' && <Attendance />}
+          {activeTab === 'reports' && <Reports />}
+          {activeTab === 'settings' && <Settings />}
         </main>
       </div>
     </div>

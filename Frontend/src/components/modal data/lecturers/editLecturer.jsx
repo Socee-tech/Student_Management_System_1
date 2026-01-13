@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { BookOpen, Mail, Phone, User, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-select";
@@ -8,26 +8,22 @@ import UseNotify from "../../../../snackBar/snackBar";
 
 
 
-export default function EditLecturer({ lecturer, onClose }) {
+export default function EditLecturer({ lecturer, onClose, refresh }) {
     const { notifySuccess, notifyError } = UseNotify();
+    const [dpt, setDpt] = useState(lecturer.department.name || "");
     const [courses, setCourses] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [formData, setFormData] = useState({
         name: lecturer.name || '',
+        gender: lecturer.gender || '',
         email: lecturer.email || '',
-        department: lecturer.department || '',
+        department: '',
         phone: lecturer.phone || '',
         status: lecturer.status || '',
-        courses: lecturer.courses.map((course) => course._id) || [],
+        courses: lecturer.courses || [],
     });
-    const departments = ['Computer Science', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'English', 'Economics', 'Business', 'Art', 'Music'];
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
-    };
-    const removeCourse = (course) => {
-        setFormData({
-            ...formData,
-            courses: formData.courses.filter((c) => c !== course)
-        });
     };
     useEffect(() => {
         const fetchCourses = async () => {
@@ -42,8 +38,29 @@ export default function EditLecturer({ lecturer, onClose }) {
                 console.error("error fetching courses", error);
             }
         };
+
+        const fetchDepartments = async () => {
+            try {
+                const res = await API.get('/departments');
+                const formated = res.data.map((dept) => ({
+                    value: dept._id,
+                    label: dept.name
+                }));
+                setDepartments(formated);
+
+                const defaultDeptId = formated.find(d => d.label === lecturer.department.name)?.value || '';
+                setFormData(prev => ({
+                    ...prev,
+                    department: prev.department || defaultDeptId
+                }));
+            } catch (error) {
+                console.error("error fetching departments", error);
+            }
+        }
+
         fetchCourses();
-    }, []);
+        fetchDepartments();
+    }, [lecturer.department.name]);
 
     const handleCourseChange = (selectedOptions) => {
         const courseIDs = selectedOptions.map((option) => option.value);
@@ -54,12 +71,14 @@ export default function EditLecturer({ lecturer, onClose }) {
     };
     const handleDptChange = (selectedOption) => {
         setFormData({ ...formData, department: selectedOption.value });
+        setDpt(selectedOption.label);
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await API.put(`/lecturers/${lecturer.LecID}`, formData);
             if (res.status === 200) {
+                refresh((prev) => !prev);
                 onClose();
                 notifySuccess("Lecturer updated successfully");
             } else {
@@ -71,13 +90,13 @@ export default function EditLecturer({ lecturer, onClose }) {
         }
     }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
-            <motion.div
+            <Motion.div
                 onClick={(e) => e.stopPropagation()}
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -107,6 +126,24 @@ export default function EditLecturer({ lecturer, onClose }) {
                                 onChange={handleChange}
                                 type="text"
                             />
+                        </div>
+                        <div className="flex flex-col">
+                            <div className="flex">
+                                <User size={16} />
+                                <label htmlFor="name" className="text-sm">Gender:</label>
+                            </div>
+                            <select
+                                id="gender"
+                                className="input-field ml-0 p-2"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                type="text"
+                            >
+                                <option value="Null" className="select-bg">--Select--</option>
+                                <option value="Male" className="select-bg">Male</option>
+                                <option value="Female" className="select-bg">Female</option>
+                                <option value="Other" className="select-bg">Other</option>
+                            </select>
                         </div>
                         <div className="flex flex-col">
                             <div className="flex">
@@ -155,48 +192,32 @@ export default function EditLecturer({ lecturer, onClose }) {
                                 <Users size={16} />
                                 <label htmlFor="department" className="text-sm">Department:</label>
                             </div>
-                            <input
-                                id="department"
-                                className="input-field ml-0 p-2"
-                                value={formData.department}
-                                onChange={handleChange}
-                                type="text" />
-                        </div>
-                        <div className="flex flex-col">
-                            <div className="flex">
-                                <BookOpen size={16} />
-                                <label htmlFor="courses" className="text-sm">Courses:</label>
+                            <div>
+                                <Select
+                                    name="department"
+                                    value={departments.filter(dept => dpt === dept.label)}
+                                    options={departments}
+                                    className="text-black"
+                                    placeholder="Select department..."
+                                    onChange={handleDptChange}
+                                />
                             </div>
-                            <Select
-                                isMulti
-                                name="courses"
-                                options={courses}
-                                className="text-black"
-                                placeholder="Select courses..."
-                                onChange={handleCourseChange}
-                            />
-                        </div>
-                        <div>
-                            <Select
-                                name="department"
-                                options={departments.map((dept) => ({ value: dept, label: dept }))}
-                                className="text-black"
-                                placeholder="Select department..."
-                                onChange={handleDptChange}
-                            />
                         </div>
                     </div>
-                    <div className="flex flex-col space-y-2">
-                        <div className="font-bold text-2xl">Courses:</div>
-                        {formData.courses.map((course, idx) => {
-                            const courseLabel = courses.find((c) => c.value === course)?.label;
-                            return (
-                                <ul className="flex flex-row gap-2">
-                                    <li key={idx}>{courseLabel}</li>
-                                    <div className="hover:cursor-pointer"><X className="text-red-600" onClick={() => removeCourse(course)} /></div>
-                                </ul>
-                            )
-                        })}
+                    <div className="flex flex-col">
+                        <div className="flex">
+                            <BookOpen size={16} />
+                            <label htmlFor="courses" className="text-sm">Courses:</label>
+                        </div>
+                        <Select
+                            isMulti
+                            value={courses.filter(course => formData.courses.includes(course.value))}
+                            name="courses"
+                            options={courses}
+                            className="text-black"
+                            placeholder="Select courses..."
+                            onChange={handleCourseChange}
+                        />
                     </div>
                     <div className="justify-end">
                         <button
@@ -209,7 +230,7 @@ export default function EditLecturer({ lecturer, onClose }) {
                         >Cancel</button>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

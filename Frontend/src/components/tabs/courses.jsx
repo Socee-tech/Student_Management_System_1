@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
@@ -12,6 +11,7 @@ import DotLoader from "../spinner";
 
 export default function Courses() {
     const { notifyError } = UseNotify();
+    const [refresh, setRefresh] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [courses1, setCourses1] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState({ edit: '', delete: '' });
@@ -39,24 +39,27 @@ export default function Courses() {
     const handleChange = (e) => {
         setFilter({ ...filter, [e.target.id]: e.target.value });
     }
-    useEffect(() => {
-        fetchCourses();
-    }, [modalOpen, selectedCourse.edit, selectedCourse.delete]);
-    const fetchCourses = async () => {
+
+    const fetchCourses = useCallback(async () => {
         try {
             setIsLoading(true);
             const res = await API.get("/courses");
             if (res && res.data) {
                 setCourses1(res.data);
-                setIsLoading(false);
             } else {
                 notifyError("Failed to fetch courses");
             }
         } catch (error) {
             console.error("Error fetching courses:", error);
             notifyError("Failed to fetch courses");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    }, []);
+
+    useEffect(() => {
+        fetchCourses();
+    }, [refresh, fetchCourses]);
 
     return (
         <div className="flex flex-col space-y-4">
@@ -119,9 +122,9 @@ export default function Courses() {
                     </tbody>
                 </table>
                 {isLoading && <DotLoader />}
-                {selectedCourse.edit && (<EditCourse course={selectedCourse.edit} onclose={handleClose} />)}
-                {selectedCourse.delete && (<DeleteCourse course={selectedCourse.delete} onCLose={handleClose} />)}
-                {modalOpen && (<AddCourse onClose={handleModalClose} />)}
+                {selectedCourse.edit && (<EditCourse course={selectedCourse.edit} onclose={handleClose} refresh={setRefresh} />)}
+                {selectedCourse.delete && (<DeleteCourse course={selectedCourse.delete} onCLose={handleClose} refresh={setRefresh} />)}
+                {modalOpen && (<AddCourse onClose={handleModalClose} refresh={setRefresh} />)}
             </div>
         </div>
     )

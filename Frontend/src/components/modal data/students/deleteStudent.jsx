@@ -1,16 +1,17 @@
-import { motion } from "framer-motion"
+import { motion as Motion } from "framer-motion"
 import { X } from "lucide-react"
 import API from "../../../API/axios"
 import UseNotify from "../../../../snackBar/snackBar"
 
 
 
-export const DeleteStudent = ({ student, onClose }) => {
+export const DeleteStudent = ({ student, onClose, refresh }) => {
     const { notifySuccess, notifyError } = UseNotify();
     const handleDelete = () => {
         try {
             const res = API.delete(`/students/${encodeURIComponent(student.regNo)}`);
             if (res) {
+                refresh((prev) => !prev);
                 notifySuccess("Student deleted successfully");
                 onClose();
             }
@@ -21,13 +22,13 @@ export const DeleteStudent = ({ student, onClose }) => {
 
     }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onClose}
         >
-            <motion.div
+            <Motion.div
                 onClick={(e) => e.stopPropagation()}
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -50,7 +51,7 @@ export const DeleteStudent = ({ student, onClose }) => {
                             <li><span className="font-bold">Phone:</span> {student.phone}</li>
                             <li><span className="font-bold">Reg No:</span> {student.regNo}</li>
                             <li><span className="font-bold">Gender:</span> {student.gender}</li>
-                            <li><span className="font-bold">Course:</span> {student.course}</li>
+                            <li><span className="font-bold">Department:</span> {student.department.name}</li>
                             <li><span className="font-bold">Year:</span> {student.year}</li>
                             <li><span className="font-bold">Date enrolled:</span> {student.admDate}</li>
                         </ul>
@@ -66,7 +67,7 @@ export const DeleteStudent = ({ student, onClose }) => {
                         >Delete</button>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

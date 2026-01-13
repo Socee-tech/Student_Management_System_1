@@ -1,6 +1,6 @@
 // src/components/StatCard.jsx
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React from "react";
+import { motion as Motion } from "framer-motion";
 
 const StatCard = ({ title, value, icon: Icon, onClick }) => {
     // Prevent background scrolling when modal is open
@@ -19,10 +19,10 @@ const StatCard = ({ title, value, icon: Icon, onClick }) => {
     return (
         <>
             {/* 🔹 Compact Card */}
-            <motion.div
+            <Motion.div
                 layout
                 onClick={() => onClick(title)}
-                className="dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg cursor-pointer p-2 relative overflow-hidden"
+                className="dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg cursor-pointer p-4 relative overflow-hidden"
                 whileHover={{ scale: 1.02 }}
             >
                 <div className="flex justify-between items-start mb-3">
@@ -32,11 +32,11 @@ const StatCard = ({ title, value, icon: Icon, onClick }) => {
                     {Icon && <Icon className="text-indigo-500 w-6 h-6" />}
                 </div>
 
-                <motion.div
+                <Motion.div
                     layout
                     className="text-4xl font-bold text-gray-900 dark:text-white"
-                >{value}</motion.div>
-            </motion.div>
+                >{value}</Motion.div>
+            </Motion.div>
         </>
     );
 };

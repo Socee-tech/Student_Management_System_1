@@ -19,6 +19,17 @@ Router.get("/", async (req, res) => {
     return res.status(500).json(error.message);
   }
 });
+Router.get("/dpt", async (req, res) => {
+  try {
+    const lecturers = await Lecturer.find({}).populate(
+      "department",
+      "name -_id"
+    );
+    return res.status(200).json(lecturers);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
 Router.get("/count", async (req, res) => {
   try {
     const count = await Lecturer.countDocuments();

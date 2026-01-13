@@ -5,13 +5,22 @@ const Router = express.Router();
 
 Router.post("/", async (req, res) => {
   try {
-    const { name, regNo, course, year, gender, email, phone, admDate } =
-      req.body;
+    const {
+      name,
+      regNo,
+      department,
+      course,
+      year,
+      gender,
+      email,
+      phone,
+      admDate,
+    } = req.body;
 
     if (
       !name ||
       !regNo ||
-      !course ||
+      (!department && !course) ||
       !year ||
       !gender ||
       !email ||
@@ -25,6 +34,7 @@ Router.post("/", async (req, res) => {
     const newStudent = new Student({
       name,
       regNo,
+      department,
       course,
       year,
       gender,
@@ -37,20 +47,11 @@ Router.post("/", async (req, res) => {
   } catch (error) {
     return res.status(500).json(error.message);
   }
-  res.status(500).json({ error: "Server error", details: error.message });
 });
 
 Router.get("/", async (req, res) => {
   try {
-    if (req.body) {
-      try {
-        const student = await Student.find({});
-        return res.status(200).json(student);
-      } catch (error) {
-        return res.status(500).json(error.message);
-      }
-    }
-    const students = await Student.find({});
+    const students = await Student.find({}).populate("department", "name -_id");
     return res.status(200).json(students);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -68,7 +69,7 @@ Router.get("/count", async (req, res) => {
 
 Router.get("/:regNo", async (req, res) => {
   try {
-    const { regNo } = req.body;
+    const { regNo } = req.params;
     const student = await Student.findOne({ regNo });
     return res.status(200).json(student);
   } catch (error) {

@@ -1,10 +1,10 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
 import UseNotify from "../../../../snackBar/snackBar";
 import API from "../../../API/axios";
 
-export default function EditCourse({ course, onclose }) {
+export default function EditCourse({ course, onclose, refresh }) {
     const { notifySuccess, notifyError } = UseNotify();
     const [formData, setFormData] = useState({
         code: course.code,
@@ -19,6 +19,7 @@ export default function EditCourse({ course, onclose }) {
         try {
             const res = await API.put(`/courses/${course.code}`, formData);
             if (res && res.data) {
+                refresh((prev) => !prev);
                 notifySuccess("Course updated successfully");
                 onclose();
             } else {
@@ -30,13 +31,13 @@ export default function EditCourse({ course, onclose }) {
         }
     }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-101"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[101]"
             onClick={onclose}
         >
-            <motion.div
+            <Motion.div
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
@@ -92,7 +93,7 @@ export default function EditCourse({ course, onclose }) {
 
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

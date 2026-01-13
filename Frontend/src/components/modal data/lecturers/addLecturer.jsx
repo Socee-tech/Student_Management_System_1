@@ -1,15 +1,20 @@
-import { motion } from "framer-motion";
-import { User, X } from "lucide-react";
+import { motion as Motion } from "framer-motion";
+import { BookA, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import API from "../../../API/axios";
 import UseNotify from "../../../../snackBar/snackBar";
 
-export default function AddLecturer({ onClose }) {
+export default function AddLecturer({ onClose, refresh }) {
     const { notifySuccess, notifyError } = UseNotify();
+    const [departments, setDepartments] = useState([]);
+    useEffect(() => {
+        fetchDepartments();
+    }, []);
     const [formData, setFormData] = useState({
         LecID: '',
         name: '',
+        gender: '',
         department: '',
         email: '',
         phone: '+254',
@@ -46,6 +51,7 @@ export default function AddLecturer({ onClose }) {
         try {
             const res = await API.post('/lecturers', formData);
             if (res && res.data) {
+                refresh((prev) => !prev);
                 notifySuccess("Lecturer added successfully");
                 onClose();
             } else {
@@ -56,14 +62,32 @@ export default function AddLecturer({ onClose }) {
             console.error("error adding lecturer", error);
         }
     }
+    const fetchDepartments = async () => {
+        try {
+            const res = await API.get('/departments');
+            const deptOptions = res.data.map((dept) => ({
+                value: dept._id,
+                label: dept.name
+            }));
+            setDepartments(deptOptions);
+        } catch (error) {
+            console.error("error fetching departments", error);
+        }
+    }
+    const handleDepartmentChange = (selectedOption) => {
+        setFormData({
+            ...formData,
+            department: selectedOption ? selectedOption.value : ''
+        });
+    }
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={onClose}
-            className="fixed flex inset-0 bg-black/40 backdrop-blur-sm items-center z-101"
+            className="fixed flex inset-0 bg-black/40 backdrop-blur-sm items-center z-[101]"
         >
-            <motion.div
+            <Motion.div
                 initial={{ scale: 0.8, y: -30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
@@ -105,12 +129,12 @@ export default function AddLecturer({ onClose }) {
                         <div className="flex flex-col">
                             <div className="flex">
                                 <User size={16} />
-                                <label htmlFor="department" className="text-sm">Department:</label>
+                                <label htmlFor="gender" className="text-sm">Gender:</label>
                             </div>
                             <input
-                                name="department"
+                                name="gender"
                                 className="input-field ml-0 p-2"
-                                value={formData.department}
+                                value={formData.gender}
                                 onChange={handleChange}
                                 type="text"
                             />
@@ -157,23 +181,44 @@ export default function AddLecturer({ onClose }) {
                                 <option value="Inactive" className="select-bg">Inactive</option>
                             </select>
                         </div>
-                        <div>
-                            <Select
-                                isMulti
-                                name="courses"
-                                options={courses}
-                                className="text-black"
-                                placeholder="Select courses..."
-                                onChange={handleCourseChange}
-                            />
+                        <div className="flex flex-col">
+                            <div className="flex">
+                                <User size={16} />
+                                <label htmlFor="department" className="text-sm">Department:</label>
+                            </div>
+                            <div>
+                                <Select
+                                    options={departments}
+                                    className="text-black"
+                                    placeholder="Select department..."
+                                    onChange={handleDepartmentChange}
+                                />
+                            </div>
                         </div>
+                        <div className="flex flex-col">
+                            <div className="flex">
+                                <BookA size={16} />
+                                <label htmlFor="department" className="text-sm">Courses:</label>
+                            </div>
+                            <div>
+                                <Select
+                                    isMulti
+                                    name="courses"
+                                    options={courses}
+                                    className="text-black"
+                                    placeholder="Select courses..."
+                                    onChange={handleCourseChange}
+                                />
+                            </div>
+                        </div>
+                        
                     </div>
                     <div className="flex justify-end gap-4">
                         <button className="action-decline p-2" onClick={onClose}>Cancel</button>
                         <button className="action-accept" onClick={handleSubmit}>Add Lecturer</button>
                     </div>
                 </div>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
     )
 }

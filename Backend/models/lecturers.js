@@ -7,7 +7,11 @@ const LecturerSchema = new mongoose.Schema({
     required: true,
   },
   name: String,
-  department: String,
+  gender: String,
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Department",
+  },
   email: {
     type: String,
     unique: true,
@@ -24,5 +28,5 @@ const LecturerSchema = new mongoose.Schema({
     },
   ],
 });
-const Lecturer = mongoose.model('Lecturer', LecturerSchema);
+const Lecturer = mongoose.model("Lecturer", LecturerSchema);
 export default Lecturer;
