@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route index element={<Login />} />     
+        <Route index element={<Login />} />
 
         <Route path="/admin" element={<Dashboard />} />
       </Routes>

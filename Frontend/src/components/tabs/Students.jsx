@@ -4,7 +4,6 @@ import { DeleteStudent } from "../modal data/students/deleteStudent";
 import { ViewStudent } from "../modal data/students/viewStudent";
 import AddStudent from "../modal data/students/addStudent";
 import API from "../../API/axios";
-import { useSnackbar } from "notistack";
 import DotLoader from "../spinner";
 import UseNotify from "../../../snackBar/snackBar";
 
@@ -25,7 +24,6 @@ export default function Students() {
     }
     const handleModalClose = () => { setModalOpen(false) };
     const selectStudent = ({ student, action }) => setSelectedStudent({ ...selectedStudent, [action]: student });
-    const { enqueueSnackbar } = useSnackbar();
     const students = students1;
     const handleChange = (e) => {
         setFilter({ ...filter, [e.target.id]: e.target.value })
