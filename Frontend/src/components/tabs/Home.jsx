@@ -18,20 +18,7 @@ import {
 } from "lucide-react";
 import API from "../../API/axios";
 import UseNotify from "../../../snackBar/snackBar";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Legend,
-  Tooltip,
-  Bar,
-  BarChart,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-} from "recharts";
+    
 export default function Home({ isMenuOpen }) {
   const { notifyError } = UseNotify();
   const [count, setCount] = useState({ studNo: "", lectNo: "", courseNo: "" });
@@ -102,121 +89,6 @@ export default function Home({ isMenuOpen }) {
           <StatCard title="Performance" value="70%" icon={TrendingUp} />
         </section>
       </div>
-
-      <section className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 min-h-[12rem] gap-4">
-        <div>
-          <PieChartDefaultIndex />
-        </div>
-        <div style={{ width: "100%", height: "350px" }}>
-          <CustomizeLabels />
-        </div>
-        <div style={{ width: "100%", height: "350px" }}>
-          <Step1 />
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function Step1() {
-  return (
-    <div style={{ width: "100%", maxWidth: 500, height: 300, margin: "auto" }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={data}
-          margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
-        >
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="uv" stroke="purple" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
-const data = [
-  { name: "Jan", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Feb", uv: 300, pv: 4567, amt: 2400 },
-  { name: "Mar", uv: 320, pv: 1398, amt: 2400 },
-  { name: "Apr", uv: 200, pv: 9800, amt: 2400 },
-  { name: "May", uv: 278, pv: 3908, amt: 2400 },
-  { name: "Jun", uv: 189, pv: 4800, amt: 2400 },
-];
-
-const margin = {
-  top: 20,
-  right: 30,
-  left: 20,
-  bottom: 25,
-};
-
-const formatAxisTick = (value) => {
-  return `*${value}*`;
-};
-
-const renderCustomBarLabel = ({ x, y, width, value }) => {
-  return (
-    <text
-      x={x + width / 2}
-      y={y}
-      fill="#666"
-      textAnchor="middle"
-      dy={-6}
-    >{`value: ${value}`}</text>
-  );
-};
-
-function CustomizeLabels() {
-  return (
-    <div style={{ width: "100%", maxWidth: 600, margin: "auto" }}>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={margin}>
-          <XAxis
-            dataKey="name"
-            tickFormatter={formatAxisTick}
-            label={{
-              position: "insideBottomRight",
-              value: "Months",
-              offset: -10,
-            }}
-          />
-          <YAxis
-            label={{
-              position: "insideTopLeft",
-              value: "Values",
-              angle: -90,
-              dy: 60,
-            }}
-          />
-          <Bar dataKey="uv" fill="#8884d8" label={renderCustomBarLabel} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
-function PieChartDefaultIndex({ isAnimationActive = true }) {
-  return (
-    <div style={{ width: "100%", maxWidth: 400, height: 400, margin: "auto" }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            activeShape={{ fill: "red" }}
-            data={[
-              { name: "Page A", uv: 590 },
-              { name: "Page B", uv: 590 },
-              { name: "Page C", uv: 868 },
-            ]}
-            dataKey="uv"
-            isAnimationActive={isAnimationActive}
-          />
-          <Tooltip defaultIndex={2} />
-        </PieChart>
-      </ResponsiveContainer>
     </div>
   );
 }
