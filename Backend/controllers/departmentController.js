@@ -12,10 +12,19 @@ Router.post("/", async (req, res) => {
   }
 });
 
-Router.get("/", async (rea, res) => {
+Router.get("/", async (req, res) => {
   try {
     const departments = await Department.find({});
     return res.status(200).json(departments);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
+Router.get("/count", async (req, res) => {
+  try {
+    const count = await Department.countDocuments();
+    return res.status(200).json({ count });
   } catch (error) {
     return res.status(500).json(error.message);
   }

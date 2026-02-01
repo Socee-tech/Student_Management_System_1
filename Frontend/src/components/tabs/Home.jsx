@@ -18,10 +18,16 @@ import {
 } from "lucide-react";
 import API from "../../API/axios";
 import UseNotify from "../../../snackBar/snackBar";
-    
+
 export default function Home({ isMenuOpen }) {
   const { notifyError } = UseNotify();
-  const [count, setCount] = useState({ studNo: "", lectNo: "", courseNo: "" });
+  const [count, setCount] = useState({
+    studNo: "",
+    lectNo: "",
+    courseNo: "",
+    classNo: "",
+    dptNo: "",
+  });
   useEffect(() => {
     const fetchCount = async () => {
       try {
@@ -36,6 +42,14 @@ export default function Home({ isMenuOpen }) {
         const countCourse = await API.get("/courses/count");
         if (countCourse && countCourse.data) {
           setCount((prev) => ({ ...prev, courseNo: countCourse.data.count }));
+        }
+        const countDepartment = await API.get("/departments/count");
+        if (countDepartment && countDepartment.data) {
+          setCount((prev) => ({ ...prev, dptNo: countDepartment.data.count }));
+        }
+        const countClasses = await API.get("/classes/count");
+        if (countClasses && countClasses.data) {
+          setCount((prev) => ({ ...prev, classNo: countClasses.data.count }));
         }
       } catch (error) {
         console.error("Error fetching student count:", error);
@@ -81,11 +95,14 @@ export default function Home({ isMenuOpen }) {
             icon={Presentation}
             onClick={isMenuOpen}
           />
-          <StatCard title="Active classes" value="42" icon={BookOpenCheck} />
+          <StatCard
+            title="Active classes"
+            value={count.classNo}
+            icon={BookOpenCheck}
+          />
+          <StatCard title="Departments" value={count.dptNo} icon={Layers} />
           <StatCard title="Attendance Today" value="92%" icon={UserCheck} />
           <StatCard title="Debtors" value="500" icon={DollarSign} />
-          <StatCard title="Courses" value="267" icon={BookOpen} />
-          <StatCard title="Departments" value="20" icon={Layers} />
           <StatCard title="Performance" value="70%" icon={TrendingUp} />
         </section>
       </div>
