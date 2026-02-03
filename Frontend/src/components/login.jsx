@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../API/axios";
 import { useState } from "react";
 import UseNotify from "../../snackBar/snackBar";
-import CircularProgress from "@mui/material/CircularProgress";
-
+import CircularIndeterminate from "./circularProgress";
 export default function Login() {
   const { notifyError, notifySuccess } = UseNotify();
   const [loading, setLoading] = useState(false);
@@ -64,15 +63,11 @@ export default function Login() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              {loading ? Loading() : "Login"}
+              {loading ? <CircularIndeterminate /> : "Login"}
             </button>
           </form>
         </div>
       </div>
     </div>
   );
-}
-
-function Loading() {
-  return <CircularProgress color="inherit" size={24} />;
 }
