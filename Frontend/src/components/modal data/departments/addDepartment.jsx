@@ -91,7 +91,7 @@ export default function AddDepartment({ closeModal, refresh }) {
         initial={{ scale: 0.8, y: -30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
-        className="bg-foreground rounded-2xl w-full max-w-sm md:max-w-2xl shadow-2xl"
+        className="bg-foreground rounded-2xl w-full max-w-sm md:max-w-2xl shadow-2xl overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col space-y-4 p-4">

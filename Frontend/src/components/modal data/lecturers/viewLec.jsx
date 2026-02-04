@@ -37,7 +37,7 @@ export default function ViewLec({ lecturer, onClose }) {
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-foreground rounded-2xl shadow-2xl w-full max-w-sm md:max-w-3xl"
+                className="bg-foreground rounded-2xl shadow-2xl w-full max-w-sm md:max-w-3xl overflow-y-auto"
             >
                 <div className="flex flex-col p-4 space-y-4">
                     <div className="flex justify-between">

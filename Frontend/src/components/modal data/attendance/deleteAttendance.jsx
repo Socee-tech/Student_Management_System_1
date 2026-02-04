@@ -41,7 +41,7 @@ export default function DeleteAttendance({ session, onClose, refresh }) {
       <Motion.div
         initial={{ scale: 0.95, y: -10, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
-        className="bg-foreground rounded-2xl w-full max-w-md shadow-2xl"
+        className="bg-foreground rounded-2xl w-full max-w-md shadow-2xl overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-5 space-y-4">

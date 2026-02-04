@@ -98,7 +98,7 @@ export default function AddLecturer({ onClose, refresh }) {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-foreground rounded-2xl w-full max-w-sm md:max-w-2xl shadow-2xl mx-auto"
+        className="bg-foreground rounded-2xl w-full max-w-sm md:max-w-2xl shadow-2xl mx-auto overflow-y-auto"
       >
         <div className="flex flex-col p-4 space-y-2">
           <div className="flex justify-between">

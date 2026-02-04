@@ -39,7 +39,7 @@ export default function DeleteCourse({ course, onCLose, refresh }) {
         initial={{ scale: 0.8, y: -30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
-        className="bg-foreground rounded-2xl shadow-lg w-full max-w-sm p-4 md:max-w-4xl"
+        className="bg-foreground rounded-2xl shadow-lg w-full max-w-sm p-4 md:max-w-4xl overflow-y-auto"
       >
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center mb-4">

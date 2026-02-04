@@ -19,6 +19,7 @@ export const ViewStudent = ({ student, onClose }) => {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                className="overflow-y-auto"
             >
                 <div
                     className="bg-foreground rounded-2xl shadow-lg w-full max-w-sm p-4 flex flex-col gap-4 md:max-w-3xl"

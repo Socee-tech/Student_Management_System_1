@@ -39,7 +39,7 @@ export const DeleteStudent = ({ student, onClose, refresh }) => {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 10 }}
         exit={{ scale: 0.8, opacity: 0 }}
-        className="bg-foreground rounded-2xl shadow-lg w-full max-w-sm p-4 md:max-w-4xl"
+        className="bg-foreground rounded-2xl shadow-lg w-full max-w-sm p-4 md:max-w-4xl overflow-y-auto"
       >
         <div className="space-y-4 p-5">
           <div className="flex justify-between items-center mb-4">
