@@ -25,6 +25,7 @@ export default function MobileBar({
     { to: "courses", label: "Courses", icon: BookOpen },
     { to: "departments", label: "Departments", icon: BookOpen },
     { to: "classes", label: "Classes", icon: GraduationCap },
+    { to: "grades", label: "Grades", icon: BarChart3 },
     { to: "attendance", label: "Attendance", icon: CalendarCheck },
     { to: "reports", label: "Reports", icon: BarChart3 },
     { to: "settings", label: "Settings", icon: Settings2 },
