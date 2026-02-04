@@ -15,6 +15,7 @@ import {
   DollarSign,
   Layers,
   TrendingUp,
+  TrendingUpDownIcon,
 } from "lucide-react";
 import API from "../../API/axios";
 import UseNotify from "../../../snackBar/snackBar";
@@ -27,6 +28,7 @@ export default function Home({ isMenuOpen }) {
     courseNo: "",
     classNo: "",
     dptNo: "",
+    gradeNo: "",
   });
   useEffect(() => {
     const fetchCount = async () => {
@@ -50,6 +52,10 @@ export default function Home({ isMenuOpen }) {
         const countClasses = await API.get("/classes/count");
         if (countClasses && countClasses.data) {
           setCount((prev) => ({ ...prev, classNo: countClasses.data.count }));
+        }
+        const gradesCount = await API.get("/grades/count");
+        if (gradesCount && gradesCount.data) {
+          setCount((prev) => ({ ...prev, gradeNo: gradesCount.data.count }));
         }
       } catch (error) {
         console.error("Error fetching student count:", error);
@@ -102,7 +108,11 @@ export default function Home({ isMenuOpen }) {
           />
           <StatCard title="Departments" value={count.dptNo} icon={Layers} />
           <StatCard title="Attendance Today" value="92%" icon={UserCheck} />
-          <StatCard title="Debtors" value="500" icon={DollarSign} />
+          <StatCard
+            title="Grades"
+            value={count.gradeNo}
+            icon={TrendingUpDownIcon}
+          />
           <StatCard title="Performance" value="70%" icon={TrendingUp} />
         </section>
       </div>

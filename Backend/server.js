@@ -8,7 +8,8 @@ import lecturerController from "./controllers/lecturerController.js";
 import departmentController from "./controllers/departmentController.js";
 import classController from "./controllers/classController.js";
 import attendanceController from "./controllers/attendanceController.js";
-import userController from "./controllers/userController.js"
+import userController from "./controllers/userController.js";
+import gradeController from "./controllers/gradeController.js";
 import { studentsPerDepartment } from "./controllers/analyticsController.js";
 
 dotenv.config();
@@ -26,6 +27,7 @@ App.use("/api/departments", departmentController);
 App.use("/api/classes", classController);
 App.use("/api/attendance", attendanceController);
 App.use("/api/analytics/students-per-department", studentsPerDepartment);
+App.use("/api/grades", gradeController);
 App.use("/api/user", userController);
 
 App.get("/", (req, res) => {

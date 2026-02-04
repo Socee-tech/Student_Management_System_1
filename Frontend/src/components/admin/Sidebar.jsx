@@ -7,6 +7,7 @@ import {
   Home,
   LogOut,
   Settings,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const items = [
   { to: "departments", label: "Departments", icon: BookOpen },
   { to: "classes", label: "Classes", icon: GraduationCap },
   { to: "attendance", label: "Attendance", icon: CalendarCheck },
+  { to: "grades", label: "Grades", icon: TrendingUp },
   { to: "reports", label: "Reports", icon: BarChart3 },
   { to: "settings", label: "Settings", icon: Settings },
   { to: "logout", label: "Logout", icon: LogOut },
@@ -25,7 +27,7 @@ const items = [
 
 export default function Sidebar({ setActiveTab, currentTab }) {
   return (
-    <aside className="sticky hidden md:flex md:flex-col p-4 gap-4 text-white z-50">
+    <aside className="hidden md:flex md:flex-col p-4 gap-4 z-50">
       <div className="text-xl font-bold mb-4">School Admin</div>
 
       <nav className="flex flex-col gap-2">
