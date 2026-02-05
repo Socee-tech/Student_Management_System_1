@@ -39,17 +39,20 @@ export default function MobileBar({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={OnClose}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[101]"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200]"
         >
           <Motion.div
             initial={{ x: "-100%" }}
             animate={{ x: isOpen ? "0%" : "-100%" }}
             transition={{ type: "spring", stiffness: 200, damping: 18 }}
-            className="fixed top-0 left-0 h-full w-64 bg-foreground z-50 flex flex-col p-5"
+            className="fixed top-0 left-0 h-full w-72 bg-foreground/95 backdrop-blur z-[201] flex flex-col p-5 border-r border-border/60 shadow-[12px_0_30px_rgba(0,0,0,0.18)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="font-bold text-2xl">Menu</h2>
+              <div>
+                <h2 className="font-bold text-2xl">Menu</h2>
+                <p className="text-xs text-muted">Quick navigation</p>
+              </div>
               <button onClick={OnClose}>
                 <X className="h-6 w-6" />
               </button>
@@ -62,9 +65,11 @@ export default function MobileBar({
                   <button
                     type="button"
                     className={[
-                      "flex items-center gap-3 px-3 py-2 rounded-lg text-left",
+                      "flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
                       "hover:bg-t-hover hover:cursor-pointer",
-                      isActive ? "bg-t-bg font-semibold" : "",
+                      isActive
+                        ? "bg-t-bg font-semibold shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+                        : "text-muted",
                     ].join(" ")}
                     onClick={() => (setActiveTab(it.to), OnClose())}
                     key={it.label}

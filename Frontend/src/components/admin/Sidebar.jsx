@@ -29,10 +29,15 @@ const items = [
 
 export default function Sidebar({ setActiveTab, currentTab }) {
   return (
-    <aside className="hidden md:flex md:flex-col p-4 gap-4 z-50">
-      <div className="text-xl font-bold mb-4">School Admin</div>
+    <aside className="hidden md:flex md:flex-col p-4 gap-4 z-50 w-64">
+      <div className="rounded-2xl border border-border/60 bg-foreground/90 backdrop-blur p-4 shadow-[0px_14px_26px_rgba(0,0,0,0.12)]">
+        <div className="text-xs uppercase tracking-[0.2em] text-muted">
+          Control Center
+        </div>
+        <div className="text-xl font-semibold mt-2">School Admin</div>
+      </div>
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-foreground/90 backdrop-blur p-3 shadow-[0px_14px_26px_rgba(0,0,0,0.12)]">
         {items.map((it) => {
           const Icon = it.icon;
           const isActive = currentTab === it.to;
@@ -40,9 +45,11 @@ export default function Sidebar({ setActiveTab, currentTab }) {
             <button
               type="button"
               className={[
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-left",
+                "flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
                 "hover:bg-t-hover hover:cursor-pointer",
-                isActive ? "bg-t-bg font-semibold" : "",
+                isActive
+                  ? "bg-t-bg font-semibold shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+                  : "text-muted",
               ].join(" ")}
               onClick={() => setActiveTab(it.to)}
               key={it.label}
@@ -54,7 +61,7 @@ export default function Sidebar({ setActiveTab, currentTab }) {
         })}
       </nav>
 
-      <div className="mt-auto text-sm text-primary/70">v1.0</div>
+      <div className="mt-auto text-xs text-muted">v1.0</div>
     </aside>
   );
 }

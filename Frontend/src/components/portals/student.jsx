@@ -162,7 +162,7 @@ export default function StudentPortal({
                 >
                   <stat.icon className="h-6 w-6" />
                   <div>
-                    <div className="text-2xl font-bold text-primary">
+                    <div className="text-2xl font-bold text-black">
                       {stat.value}
                     </div>
                     <div className="text-xs uppercase tracking-wide">

@@ -27,12 +27,12 @@ export default function Dashboard({ Tab }) {
     }
   }, [Tab]);
   return (
-    <div className="h-screen bg-foreground text-primary flex flex-col p-4 relative">
+    <div className="h-screen bg-background text-primary flex flex-col pt-15 p-1 md:p-4">
       <div className="flex-shrink-0">
         <Topbar isMenuOpen={setIsMenuOpen} />
       </div>
-      <div className="flex flex-1 overflow-hidden md:mt-10">
-        <aside className="">
+      <div className="flex flex-1 overflow-hidden mt-20 md:gap-4">
+        <aside>
           <Sidebar setActiveTab={setActiveTab} currentTab={activeTab} />
           <MobileBar
             isOpen={isMenuOpen}
@@ -41,23 +41,21 @@ export default function Dashboard({ Tab }) {
             currentTab={activeTab}
           />
         </aside>
-        <aside className="flex-1 overflow-y-auto">
-          <main className="md:p-6 flex-1 overflow-y-auto mt-16 md:mt-0 z-50">
-            {activeTab === "home" && <Home isMenuOpen={setActiveTab} />}
-            {activeTab === "students" && <Students />}
-            {activeTab === "lecturers" && <Lecturers />}
-            {activeTab === "courses" && <Courses />}
-            {activeTab === "departments" && <Departments />}
-            {activeTab === "classes" && <Classes />}
-            {activeTab === "attendance" && <Attendance />}
-            {activeTab === "grades" && <Grades />}
-            {activeTab === "reports" && <Reports />}
-            {activeTab === "settings" && <Settings />}
-            {activeTab === "logout" && navigate("/")}
-            {activeTab === "lecPortal" && navigate("/lecturer")}
-            {activeTab === "studentPortal" && navigate("/student")}
-          </main>
-        </aside>
+        <main className="md:p-6 p-1.5 flex-1 overflow-y-auto rounded-3xl border border-border/60 bg-foreground/90 backdrop-blur shadow-[0px_18px_34px_rgba(0,0,0,0.12)]">
+          {activeTab === "home" && <Home isMenuOpen={setActiveTab} />}
+          {activeTab === "students" && <Students />}
+          {activeTab === "lecturers" && <Lecturers />}
+          {activeTab === "courses" && <Courses />}
+          {activeTab === "departments" && <Departments />}
+          {activeTab === "classes" && <Classes />}
+          {activeTab === "attendance" && <Attendance />}
+          {activeTab === "grades" && <Grades />}
+          {activeTab === "reports" && <Reports />}
+          {activeTab === "settings" && <Settings />}
+          {activeTab === "logout" && navigate("/")}
+          {activeTab === "lecPortal" && navigate("/lecturer")}
+          {activeTab === "studentPortal" && navigate("/student")}
+        </main>
       </div>
     </div>
   );
