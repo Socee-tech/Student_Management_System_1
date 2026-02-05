@@ -23,6 +23,8 @@ const items = [
   { to: "reports", label: "Reports", icon: BarChart3 },
   { to: "settings", label: "Settings", icon: Settings },
   { to: "logout", label: "Logout", icon: LogOut },
+  { to: "lecPortal", label: "Lecturer Portal", icon: Home },
+  { to: "studentPortal", label: "Student Portal", icon: Home },
 ];
 
 export default function Sidebar({ setActiveTab, currentTab }) {

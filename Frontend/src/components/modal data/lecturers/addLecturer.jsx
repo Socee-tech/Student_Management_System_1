@@ -145,13 +145,19 @@ export default function AddLecturer({ onClose, refresh }) {
                   Gender:
                 </label>
               </div>
-              <input
+              <select
                 name="gender"
                 className="input-field ml-0 p-2"
                 value={formData.gender}
                 onChange={handleChange}
-                type="text"
-              />
+              >
+                <option value="Male" className="select-bg">
+                  Male
+                </option>
+                <option value="Female" className="select-bg">
+                  Female
+                </option>
+              </select>
             </div>
             <div className="flex flex-col">
               <div className="flex">

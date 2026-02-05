@@ -54,6 +54,8 @@ export default function Dashboard({ Tab }) {
             {activeTab === "reports" && <Reports />}
             {activeTab === "settings" && <Settings />}
             {activeTab === "logout" && navigate("/")}
+            {activeTab === "lecPortal" && navigate("/lecturer")}
+            {activeTab === "studentPortal" && navigate("/student")}
           </main>
         </aside>
       </div>
