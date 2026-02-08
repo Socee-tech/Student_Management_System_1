@@ -14,20 +14,22 @@ export default function Topbar({ isMenuOpen }) {
           <Menu className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+          <h1 className="text-lg font-semibold">
+            Admin <span className="hidden md:block">Dashboard</span>
+          </h1>
           <p className="text-xs text-muted">School management suite</p>
         </div>
       </div>
 
       <div
         className={cn(
-          "flex items-center gap-4 rounded-2xl border border-border/60 bg-surface px-3 py-2",
-          "shadow-[6px_6px_16px_rgba(0,0,0,0.08)]"
+          "flex items-center gap-4 rounded-2xl border border-border/60 bg-foreground px-3 py-1",
+          "shadow-[6px_6px_26px_rgba(0,0,0,0.58)]"
         )}
       >
         <ThemeToggle />
 
-        <div className="text-sm mr-1">Admin User</div>
+        <div className="text-sm mr-1 hidden md:flex">Admin User</div>
       </div>
     </nav>
   );
