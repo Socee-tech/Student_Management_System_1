@@ -107,7 +107,7 @@ export default function Attendance() {
                                 </td>
                                 <td className="tb-td">{s.presentCount ?? 0}</td>
                                 <td className="tb-td">{s.absentCount ?? 0}</td>
-                                <td className="tb-td">{s.notes || "—"}</td>
+                                <td className="tb-td whitespace-nowrap">{s.notes || "—"}</td>
                                 <td className="tb-td">
                                     <div className="flex gap-2">
                                         <button className="action-btn bg-green-600" onClick={() => setSelected((p) => ({ ...p, edit: s }))}>Edit</button>

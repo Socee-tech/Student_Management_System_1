@@ -48,11 +48,21 @@ export default function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await API.post("/user/login", formData);
+      const res = await API.post(`/user/login/${formData.role}`, formData);
       if (res?.data) {
         notifySuccess("Login successful!");
         setLoading(false);
-        navigate("/admin");
+        localStorage.setItem(
+          "portalUser",
+          JSON.stringify({ role: formData.role, email: formData.userName })
+        );
+        const target =
+          formData.role === "lecturer"
+            ? "/lecturer"
+            : formData.role === "student"
+            ? "/student"
+            : "/admin";
+        navigate(target, { state: res.data });
       }
     } catch (error) {
       notifyError("Login failed. Please check your credentials.");
@@ -123,10 +133,10 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="rounded-3xl bg-foreground p-8 shadow-2xl border border-border/60">
+        <div className="rounded-3xl bg-[radial-gradient(80%_80%_at_0%_0%,rgba(79,70,229,0.5),rgba(10,14,26,0.1))] p-8 shadow-2xl border border-border/60">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-primary">Sign in</h2>
+              <h2 className="text-2xl font-semibold text-white">Sign in</h2>
               <p className="text-sm text-muted">
                 Enter your credentials to access the portal
               </p>
@@ -143,7 +153,7 @@ export default function Login() {
                 name="userName"
                 value={formData.userName}
                 onChange={handleChange}
-                placeholder="e.g. johndoe"
+                placeholder="e.g. name@school.edu"
                 className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -154,7 +164,7 @@ export default function Login() {
                 name="passWord"
                 value={formData.passWord}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="********"
                 className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

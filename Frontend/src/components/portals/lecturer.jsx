@@ -103,8 +103,7 @@ export default function LecturerPortal({
     <div
       className="min-h-screen text-primary p-4 md:p-6"
       style={{
-        backgroundColor:
-          "color-mix(in srgb, #0f1b2d 72%, #f5f3ef 28%)",
+        backgroundColor: "color-mix(in srgb, #0f1b2d 72%, #f5f3ef 28%)",
         backgroundImage:
           "radial-gradient(60% 60% at 50% 0%, rgba(34,197,94,0.12), rgba(255,255,255,0))",
       }}
@@ -191,7 +190,7 @@ export default function LecturerPortal({
                 >
                   <stat.icon className="h-6 w-6" />
                   <div>
-                    <div className="text-2xl font-bold text-primary">
+                    <div className="text-2xl font-bold text-black">
                       {stat.value}
                     </div>
                     <div className="text-xs uppercase tracking-wide">
