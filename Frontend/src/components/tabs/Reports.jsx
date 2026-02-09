@@ -178,7 +178,6 @@ export default function Reports() {
           <div className="h-72 min-h-[280px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={studentsByDepartment}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -193,7 +192,6 @@ export default function Reports() {
           <div className="h-72 min-h-[280px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={lecturersByDepartment}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -236,7 +234,6 @@ export default function Reports() {
           <div className="h-64 min-h-[260px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={attendanceTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -262,7 +259,6 @@ export default function Reports() {
           <div className="h-64 min-h-[260px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={classStatus}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -281,7 +277,6 @@ export default function Reports() {
           <div className="h-72 min-h-[280px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={gradesPerMonth}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -326,7 +321,6 @@ export default function Reports() {
           <div className="h-72 min-h-[280px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={courseCredits}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="course" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />

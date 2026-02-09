@@ -31,7 +31,7 @@ export default function Dashboard({ Tab }) {
       <div className="flex-shrink-0">
         <Topbar isMenuOpen={setIsMenuOpen} />
       </div>
-      <div className="flex flex-1 overflow-hidden mt-20 md:gap-4">
+      <div className="flex flex-1 overflow-hidden pt-3 md:pt-23 md:gap-4">
         <aside>
           <Sidebar setActiveTab={setActiveTab} currentTab={activeTab} />
           <MobileBar

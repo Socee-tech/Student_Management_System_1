@@ -45,7 +45,9 @@ Router.post("/", async (req, res) => {
     const savedStudent = await newStudent.save();
     res.status(201).json(savedStudent);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Failed to create student" });
   }
 });
 
@@ -54,7 +56,9 @@ Router.get("/", async (req, res) => {
     const students = await Student.find({}).populate("department", "name -_id");
     return res.status(200).json(students);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Failed to fetch students" });
   }
 });
 
@@ -63,7 +67,46 @@ Router.get("/count", async (req, res) => {
     const count = await Student.countDocuments();
     return res.status(200).json({ count });
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Failed to count students" });
+  }
+});
+
+Router.get("/students-per-department", async (req, res) => {
+  try {
+    const data = await Student.aggregate([
+      {
+        $group: {
+          _id: "$department",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "departments",
+          localField: "_id",
+          foreignField: "_id",
+          as: "department",
+        },
+      },
+      {
+        $unwind: "$department",
+      },
+      {
+        $project: {
+          _id: 0,
+          department: "$department.name",
+          count: 1,
+        },
+      },
+    ]);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+      message: "Server failed to group students by department",
+    });
   }
 });
 
@@ -73,7 +116,10 @@ Router.get("/:regNo", async (req, res) => {
     const student = await Student.findOne({ regNo });
     return res.status(200).json(student);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Failed to get student by registration number",
+    });
   }
 });
 
@@ -91,7 +137,10 @@ Router.put("/:regNo", async (req, res) => {
     );
     return res.status(200).json(updatedStudent);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Failed to update student by registration number",
+    });
   }
 });
 
@@ -103,7 +152,10 @@ Router.delete("/:regNo", async (req, res) => {
       .status(200)
       .json({ deletedStudent, message: "Student deleted successfully" });
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Failed to delete student by registration number",
+    });
   }
 });
 

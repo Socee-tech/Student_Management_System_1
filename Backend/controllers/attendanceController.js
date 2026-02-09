@@ -18,7 +18,10 @@ Router.post("/", async (req, res) => {
 
     return res.status(201).json(populated);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to create attendance session",
+    });
   }
 });
 
@@ -30,7 +33,27 @@ Router.get("/", async (req, res) => {
 
     return res.status(200).json(sessions);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to fetch attendance sessions",
+    });
+  }
+});
+
+Router.get("/attendace", async (req, res) => {
+  try {
+    const sessions = await AttendanceSession.aggregate([
+      {
+        $group: {
+          _id: "$date",
+        },
+      },
+    ]);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to fetch attendance sessions",
+    });
   }
 });
 
@@ -43,7 +66,10 @@ Router.get("/:id", async (req, res) => {
     if (!found) return res.status(404).json("Attendance session not found");
     return res.status(200).json(found);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to fetch attendance session",
+    });
   }
 });
 
@@ -58,7 +84,10 @@ Router.put("/:id", async (req, res) => {
     if (!updated) return res.status(404).json("Attendance session not found");
     return res.status(200).json(updated);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to update attendance session",
+    });
   }
 });
 
@@ -70,7 +99,10 @@ Router.delete("/:id", async (req, res) => {
       .status(200)
       .json({ message: "Attendance session deleted", deleted });
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to delete attendance session",
+    });
   }
 });
 

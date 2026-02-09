@@ -59,6 +59,7 @@ export default function Home({ isMenuOpen }) {
   });
   const [students, setStudents] = useState([]);
   const [grades, setGrades] = useState([]);
+  const [gradesT, setGradeT] = useState([]);
   const [attendance, setAttendance] = useState([]);
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,11 +91,15 @@ export default function Home({ isMenuOpen }) {
         if (gradesCount && gradesCount.data) {
           setCount((prev) => ({ ...prev, gradeNo: gradesCount.data.count }));
         }
+        const GradeT = await API.get("/grades").then((res) =>
+          res.data.slice(0, 5)
+        );
+        setGradeT(GradeT);
 
         const [studentsRes, gradesRes, attendanceRes, classesRes] =
           await Promise.all([
-            API.get("/students"),
-            API.get("/grades"),
+            API.get("/students/students-per-department"),
+            API.get("/grades/students-per-grade"),
             API.get("/attendance"),
             API.get("/classes"),
           ]);
@@ -113,18 +118,10 @@ export default function Home({ isMenuOpen }) {
     fetchCount();
   }, []);
 
-  const studentsByDepartment = useMemo(
-    () =>
-      groupCounts(students, (s) =>
-        typeof s.department === "string" ? s.department : s?.department?.name
-      ).slice(0, 6),
-    [students]
-  );
-
-  const gradeDistribution = useMemo(
-    () => groupCounts(grades, (g) => g.grade || "Pending"),
-    [grades]
-  );
+  const gradeDistributionColors = grades.map((entry, index) => ({
+    ...entry,
+    fill: PIE_COLORS[index % PIE_COLORS.length],
+  }));
 
   const attendanceTrend = useMemo(() => {
     const trimmed = [...attendance].slice(0, 7).reverse();
@@ -136,7 +133,10 @@ export default function Home({ isMenuOpen }) {
   }, [attendance]);
 
   const recentClasses = useMemo(() => classes.slice(0, 5), [classes]);
-  const recentGrades = useMemo(() => grades.slice(0, 5), [grades]);
+  const recentGrades = useMemo(
+    async () => await [API.get("/grades").then((res) => res.data.slice(0, 5))],
+    []
+  );
 
   return (
     <div className="space-y-6">
@@ -197,9 +197,11 @@ export default function Home({ isMenuOpen }) {
             <span className="text-xs text-muted">Top 6</span>
           </div>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={studentsByDepartment}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <BarChart
+              data={students}
+              margin={{ top: 0, right: 0, left: 0, bottom: 20 }}
+            >
+              <XAxis dataKey="department" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
               <Bar dataKey="count" fill="#2563eb" radius={[8, 8, 0, 0]} />
@@ -215,20 +217,14 @@ export default function Home({ isMenuOpen }) {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={gradeDistribution}
+                data={gradeDistributionColors}
                 dataKey="count"
                 nameKey="name"
                 outerRadius={90}
                 innerRadius={55}
                 paddingAngle={4}
-              >
-                {gradeDistribution.map((entry, index) => (
-                  <Cell
-                    key={`cell-${entry.name}`}
-                    fill={PIE_COLORS[index % PIE_COLORS.length]}
-                  />
-                ))}
-              </Pie>
+                fill={(entry, index) => PIE_COLORS[index % PIE_COLORS.length]}
+              ></Pie>
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
@@ -239,18 +235,19 @@ export default function Home({ isMenuOpen }) {
             <h3 className="font-semibold">Attendance Trend</h3>
             <span className="text-xs text-muted">Last 7 sessions</span>
           </div>
-          <div style={{ height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={attendanceTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Line type="monotone" dataKey="present" stroke="#16a34a" />
-                <Line type="monotone" dataKey="absent" stroke="#ef4444" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={attendanceTrend}
+              margin={{ top: 5, right: 0, left: 0, bottom: 20 }}
+            >
+              <CartesianGrid horizontal={true} vertical={false} stroke="#ccc" />
+              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} />
+              <Tooltip />
+              <Line type="monotone" dataKey="present" stroke="#16a34a" />
+              <Line type="monotone" dataKey="absent" stroke="#ef4444" />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </section>
 
@@ -307,7 +304,7 @@ export default function Home({ isMenuOpen }) {
                 </tr>
               </thead>
               <tbody>
-                {recentGrades.map((g) => (
+                {gradesT.map((g) => (
                   <tr key={g._id} className="odd:bg-t-odd hover:bg-t-hover">
                     <td className="tb-td">{g.student?.name || "—"}</td>
                     <td className="tb-td">{g.course?.code || "—"}</td>

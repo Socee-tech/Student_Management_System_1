@@ -45,7 +45,9 @@ Router.post("/", async (req, res) => {
     const savedGrade = await newGrade.save();
     return res.status(201).json(savedGrade);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Server failed to create grade" });
   }
 });
 
@@ -62,7 +64,10 @@ Router.get("/", async (req, res) => {
 
     return res.status(200).json(grades);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to fetch grades",
+    });
   }
 });
 
@@ -74,7 +79,37 @@ Router.get("/count", async (req, res) => {
     const count = await Grade.countDocuments();
     return res.status(200).json({ count });
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Server failed to count grades" });
+  }
+});
+
+Router.get("/students-per-grade", async (req, res) => {
+  try {
+    const data = await Grade.aggregate([
+      {
+        $group: {
+          _id: "$grade",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          grade: "$_id",
+          count: 1,
+        },
+      },
+    ]);
+    return res.status(200).json(data);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        error: error.message,
+        message: "Server failed to fetch students per grade",
+      });
   }
 });
 
@@ -92,7 +127,10 @@ Router.get("/student/:studentId", async (req, res) => {
 
     return res.status(200).json(grades);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({
+      error: error.message,
+      message: "Server failed to fetch grades for student",
+    });
   }
 });
 
@@ -112,7 +150,9 @@ Router.put("/:id", async (req, res) => {
 
     return res.status(200).json(updatedGrade);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Server failed to update grade" });
   }
 });
 
@@ -130,7 +170,9 @@ Router.delete("/:id", async (req, res) => {
       message: "Grade deleted successfully",
     });
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res
+      .status(500)
+      .json({ error: error.message, message: "Server failed to delete grade" });
   }
 });
 
