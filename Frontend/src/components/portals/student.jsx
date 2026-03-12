@@ -31,7 +31,7 @@ export default function StudentPortal() {
     },
   ];
   return (
-    <div className="w-full h-screen flex flex-col bg-st-bg transition-all duration-600 ">
+    <div className="w-full h-screen flex flex-col bg-st-bg transition-all duration-600 overflow-y-hidden">
       <TopBar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="grid grid-cols-10 bg-st-bg m-2 transition-all duration-600 flex-1 overflow-y-auto [scrollbar-width-none] [&::-webkit-scrollbar]:hidden">
         {/* left screen */}
