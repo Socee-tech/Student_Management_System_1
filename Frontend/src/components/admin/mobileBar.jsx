@@ -29,6 +29,7 @@ export default function MobileBar({
     { to: "attendance", label: "Attendance", icon: CalendarCheck },
     { to: "reports", label: "Reports", icon: BarChart3 },
     { to: "settings", label: "Settings", icon: Settings2 },
+    { to: "studentPortal", label: "Student Portal", icon: Home },
   ];
   const navigate = useNavigate();
   return (
