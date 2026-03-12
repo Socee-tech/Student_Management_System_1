@@ -1,6 +1,6 @@
 import { ArrowRight, Filter, House, Link, Search } from "lucide-react";
 
-export default function Dashboard() {
+export default function Dashboard({ setActiveTab }) {
   const courses = [
     { name: "Computer Science 101", code: "CS101", lecturer: "Dr. Smith" },
     { name: "Mathematics 201", code: "MATH201", lecturer: "Prof. Johnson" },
@@ -143,7 +143,10 @@ export default function Dashboard() {
           </table>
           <div className="justify-center w-full flex mt-2">
             <div className="items-center space-x-4">
-              <button className="border border-gray-500 p-2 rounded hover:bg-green-700 hover:text-white transition-all duration-300">
+              <button
+                onClick={() => setActiveTab("Courses")}
+                className="border border-gray-500 p-2 rounded hover:bg-green-700 hover:text-white transition-all duration-300"
+              >
                 View more
               </button>
               <button className="border border-gray-500 p-2 rounded bg-green-700 text-white hover:bg-green-950 transition-all duration-300">
@@ -183,7 +186,10 @@ export default function Dashboard() {
           </table>
           <div className="justify-center w-full flex mt-2">
             <div className="items-center space-x-4">
-              <button className="border border-gray-500 p-2 rounded hover:bg-green-700 hover:text-white transition-all duration-300">
+              <button
+                onClick={() => setActiveTab("Grades")}
+                className="border border-gray-500 p-2 rounded hover:bg-green-700 hover:text-white transition-all duration-300"
+              >
                 View more
               </button>
             </div>
@@ -194,7 +200,10 @@ export default function Dashboard() {
         <div>
           <div className="flex justify-between p-3 border-b border-gray-400">
             <div className="text-xl font-semibold">Classes today</div>
-            <button className="rounded flex p-1 hover:bg-green-700 justify-between hover:text-white transition-all duration-300">
+            <button
+              onClick={() => setActiveTab("Classes")}
+              className="rounded flex p-1 hover:bg-green-700 justify-between hover:text-white transition-all duration-300"
+            >
               View more
               <ArrowRight />
             </button>
@@ -227,7 +236,10 @@ export default function Dashboard() {
         <div className="col-span-2">
           <div className="flex justify-between p-3 border-b border-gray-400">
             <div className="text-2xl font-semibold">NOTICES...</div>
-            <button className="rounded flex p-1 hover:bg-green-700 justify-between hover:text-white transition-all duration-300">
+            <button
+              onClick={() => setActiveTab("Notices")}
+              className="rounded flex p-1 hover:bg-green-700 justify-between hover:text-white transition-all duration-300"
+            >
               View more
               <ArrowRight />
             </button>

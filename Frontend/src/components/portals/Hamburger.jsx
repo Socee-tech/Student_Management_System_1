@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Book,
   Clock,
+  Clock2,
+  Clock6Icon,
   Home,
   Menu,
   Settings,
@@ -18,8 +20,10 @@ export default function HamComponent({ activeTab, setActiveTab }) {
   const navigations = [
     { name: "Dashboard", icon: Home },
     { name: "Courses", icon: Book },
+    { name: "Classes", icon: Clock2 },
     { name: "Grades", icon: TrendingUp },
     { name: "Events", icon: Clock },
+    { name: "Notices", icon: Clock6Icon },
     { name: "Profile", icon: User2 },
     { name: "Transcript", icon: Book },
     { name: "Settings", icon: Settings },

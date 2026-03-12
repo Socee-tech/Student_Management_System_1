@@ -9,6 +9,8 @@ import Courses from "./tabs/courses";
 import TopBar from "./topBar";
 import Grades from "./tabs/grades";
 import Events from "./tabs/events";
+import Classes from "./tabs/classes";
+import Notices from "./tabs/notices";
 
 export default function StudentPortal() {
   const [selected, setSelected] = useState(new Date());
@@ -48,7 +50,7 @@ export default function StudentPortal() {
             </div>
           </div>
           {/* Navigations */}
-          <Navigations setActiveTab={setActiveTab} />
+          <Navigations setActiveTab={setActiveTab} activeTab={activeTab} />
         </aside>
         {/* middle screen */}
         <div className="col-span-10 md:col-span-6 bg-st-bg-m h-screen rounded-2xl transition-all duration-600 scroll-smooth overflow-y-auto overflow-x-auto [scrollbar-width-none] [&::-webkit-scrollbar]:hidden">
@@ -57,10 +59,14 @@ export default function StudentPortal() {
             <input type="text" placeholder="search" className="ml-2" />
           </div>
           {/* Tabs */}
-          {activeTab === "Dashboard" && <Dashboard />}
+          {activeTab === "Dashboard" && (
+            <Dashboard setActiveTab={setActiveTab} />
+          )}
           {activeTab === "Courses" && <Courses />}
           {activeTab === "Grades" && <Grades />}
           {activeTab === "Events" && <Events />}
+          {activeTab === "Classes" && <Classes />}
+          {activeTab === "Notices" && <Notices />}
         </div>
         {/* Right screen */}
         <div className="col-span-2 bg-st-bg h-screen flex-col hidden md:flex transition-all duration-600 scroll-smooth overflow-y-auto">
@@ -94,7 +100,10 @@ export default function StudentPortal() {
           <div className="m-3 p-2 bg-st-bg-m rounded-2xl transition-all duration-600">
             <div className="flex justify-between border-b pb-2">
               <h4 className="font-semibold text-lg">Upcoming Events</h4>
-              <button className="border-green-500 border hover:cursor-pointer rounded-lg p-1 hover:scale-105 hover:text-white hover:bg-green-800 transition-all duration-300">
+              <button
+                onClick={() => setActiveTab("Events")}
+                className="border-green-500 border hover:cursor-pointer rounded-lg p-1 hover:scale-105 hover:text-white hover:bg-green-800 transition-all duration-300"
+              >
                 View all
               </button>
             </div>
