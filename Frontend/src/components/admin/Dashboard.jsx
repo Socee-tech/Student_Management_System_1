@@ -28,7 +28,7 @@ export default function Dashboard({ Tab }) {
   }, [Tab]);
   return (
     <div className="h-screen bg-background text-primary flex flex-col pt-15 p-1 md:p-4">
-      <div className="flex-shrink-0">
+      <div className="flex shrink-0">
         <Topbar isMenuOpen={setIsMenuOpen} />
       </div>
       <div className="flex flex-1 overflow-hidden pt-3 md:pt-23 md:gap-4">

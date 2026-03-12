@@ -1,5 +1,6 @@
 import express from "express";
 import Student from "../models/students.js";
+import StudentPassword from "../models/studentPasswords.js";
 
 const Router = express.Router();
 
@@ -43,7 +44,13 @@ Router.post("/", async (req, res) => {
       admDate,
     });
     const savedStudent = await newStudent.save();
-    res.status(201).json(savedStudent);
+    const studentPassword = new StudentPassword({ email });
+    const savedStudentPassword = await studentPassword.save();
+    res.status(201).json({
+      savedStudent,
+      savedStudentPassword,
+      message: "Student created successfully",
+    });
   } catch (error) {
     return res
       .status(500)
@@ -135,7 +142,9 @@ Router.put("/:regNo", async (req, res) => {
         runValidators: true,
       }
     );
-    return res.status(200).json(updatedStudent);
+    return res
+      .status(200)
+      .json({ updatedStudent, message: "Student updated successfully" });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -148,9 +157,14 @@ Router.delete("/:regNo", async (req, res) => {
   try {
     const { regNo } = req.params;
     const deletedStudent = await Student.findOneAndDelete({ regNo });
-    return res
-      .status(200)
-      .json({ deletedStudent, message: "Student deleted successfully" });
+    const deletedStudentPassword = await StudentPassword.findOneAndDelete({
+      email: deletedStudent.email,
+    });
+    return res.status(200).json({
+      deletedStudent,
+      deletedStudentPassword,
+      message: "Student deleted successfully",
+    });
   } catch (error) {
     return res.status(500).json({
       error: error.message,

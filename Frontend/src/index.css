@@ -22,6 +22,12 @@
   --color-t-odd: hsl(var(--t-odd));
   --color-t-hover: hsl(var(--t-hover));
   --color-t-bg: hsl(var(--t-bg));
+  --color-st-bg: hsl(var(--st-bg));
+  --color-st-bg-m: hsl(var(--st-bg-m));
+  --color-st-active: hsl(var(--st-active));
+  --color-st-card-base: hsl(var(--st-card-base));
+  --color-st-card-l: hsl(var(--st-card-l));
+  --color-st-card-r: hsl(var(--st-card-r));
 }
 
 @layer base {
@@ -43,6 +49,12 @@
     --t-odd: 0 0% 22.4% / 0.26;
     --t-hover: 226 51% 49.8% / 0.48;
     --t-bg: 233 7% 52.9% / 0.13;
+    --st-bg: 66 20.9% 89.1%; /* light white */
+    --st-bg-m: 66 27.8% 80.6%; /* stonish */
+    --st-active: 116 96% 10.4%; /* bright green */
+    --st-card-base: 174 96.2% 38%; /* teal */
+    --st-card-l: 117 87.9% 55.1%;
+    --st-card-r: 208 100% 59%;
   }
 
   .dark {
@@ -62,6 +74,12 @@
     --t-odd: 0 0% 49.8% / 0.26;
     --t-hover: 233 60.3% 43.9% / 0.99;
     --t-bg: 233 7% 52.9% / 0.58;
+    --st-bg: 66 0% 11.1%; /* light black */
+    --st-bg-m: 66 5.7% 7.5%; /* blacker then sorounding */
+    --st-active: 116 56.4% 15.8%; /* bright green but darker for dark mode */
+    --st-card-base: 174 8.9% 14.5%; /* gray */
+    --st-card-r: 209 87.9% 45.6%;
+    --st-card-l: 117 87.9% 11.1%;
   }
 
   html {
@@ -75,72 +93,81 @@
   }
 }
 
-@utility my-button-alt {
-  @apply px-4 py-2 rounded-lg text-white font-medium hover:cursor-pointer transition duration-300 shadow-lg hover:shadow-2xl;
-  background: linear-gradient(
-    90deg,
-    rgba(234, 179, 8, 0.95),
-    rgba(251, 191, 36, 0.9)
-  );
-}
-@utility card-left {
-  @apply ml-2 mr-1 rounded-2xl p-4 w-full md:w-64 flex flex-col mt-2 mb-2;
-  background-color: rgb(var(--surface));
-  box-shadow: var(--card-shadow);
-}
+@layer utilities {
+  .my-button-alt {
+    @apply px-4 py-2 rounded-lg text-white font-medium hover:cursor-pointer transition duration-300 shadow-lg hover:shadow-2xl;
+    background: linear-gradient(
+      90deg,
+      rgba(234, 179, 8, 0.95),
+      rgba(251, 191, 36, 0.9)
+    );
+  }
+  .card-left {
+    @apply ml-2 mr-1 rounded-2xl p-4 w-full md:w-64 flex flex-col mt-2 mb-2;
+    background-color: rgb(var(--surface));
+    box-shadow: var(--card-shadow);
+  }
 
-@utility card-right {
-  @apply p-6 m-2 ml-0 rounded-2xl flex-1;
-  background-color: rgb(var(--surface));
-  box-shadow: var(--card-shadow);
-}
-@utility stat-card {
-  @apply flex-1 min-h-[12rem] p-4 rounded-xl m-2;
-  color: rgb(var(--muted));
-  background-color: color-mix(in srgb, rgb(var(--primary)), white 92%);
-  box-shadow: var(--card-shadow);
-}
-@utility stat-card-b {
-  @apply flex-1 min-h-[8rem] p-4 rounded-xl m-2;
-  color: rgb(var(--muted));
-  background-color: color-mix(in srgb, rgb(var(--primary)), white 94%);
-  box-shadow: var(--card-shadow);
-}
-@utility card-header {
-  @apply rounded-2xl;
-  background: linear-gradient(
-    90deg,
-    rgba(79, 70, 229, 0.95),
-    rgba(34, 197, 94, 0.9)
-  );
-}
-@utility my-button {
-  @apply px-4 py-2 rounded-lg text-white font-medium hover:cursor-pointer transition duration-300 shadow-lg hover:shadow-2xl;
-  background: linear-gradient(
-    90deg,
-    rgba(79, 70, 229, 0.95),
-    rgba(34, 197, 94, 0.9)
-  );
-}
-@utility input-field {
-  @apply w-full focus:outline-none focus:border-b-indigo-500 border-0 border-b-2 border-gray-700 rounded-lg flex-1 ml-2;
-  background-color: hsla(var(--input-bg));
-}
-@utility action-btn {
-  @apply rounded-md m-1 hover:cursor-pointer px-2 font-semibold text-gray-50;
-}
-@utility select-bg {
-  @apply hover:bg-blue-300 bg-foreground;
-}
-@utility action-accept {
-  @apply px-5 py-2.5 rounded-xl bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 hover:cursor-pointer active:bg-blue-800 focus:ring-4 focus:ring-blue-300 transition duration-200;
-}
-@utility action-decline {
-  @apply px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-semibold shadow-md hover:bg-gray-300 hover:cursor-pointer active:bg-gray-400 focus:ring-4 focus:ring-gray-200 transition duration-200;
-}
-@utility th-tr {
-  @apply px-2 py-2 text-left;
-}
-@utility tb-td {
-  @apply border-0 p-2 text-left border-b-2 border-b-primary;
+  .card-right {
+    @apply p-6 m-2 ml-0 rounded-2xl flex-1;
+    background-color: rgb(var(--surface));
+    box-shadow: var(--card-shadow);
+  }
+  .stat-card {
+    @apply flex-1 min-h-[12rem] p-4 rounded-xl m-2;
+    color: rgb(var(--muted));
+    background-color: color-mix(in srgb, rgb(var(--primary)), white 92%);
+    box-shadow: var(--card-shadow);
+  }
+  .stat-card-b {
+    @apply flex-1 min-h-[8rem] p-4 rounded-xl m-2;
+    color: rgb(var(--muted));
+    background-color: color-mix(in srgb, rgb(var(--primary)), white 94%);
+    box-shadow: var(--card-shadow);
+  }
+  .card-header {
+    @apply rounded-2xl;
+    background: linear-gradient(
+      90deg,
+      rgba(79, 70, 229, 0.95),
+      rgba(34, 197, 94, 0.9)
+    );
+  }
+  .my-button {
+    @apply px-4 py-2 rounded-lg text-white font-medium hover:cursor-pointer transition duration-300 shadow-lg hover:shadow-2xl;
+    background: linear-gradient(
+      90deg,
+      rgba(79, 70, 229, 0.95),
+      rgba(34, 197, 94, 0.9)
+    );
+  }
+  .input-field {
+    @apply w-full focus:outline-none focus:border-b-indigo-500 border-0 border-b-2 border-gray-700 rounded-lg flex-1 ml-2;
+    background-color: hsla(var(--input-bg));
+  }
+  .action-btn {
+    @apply rounded-md m-1 hover:cursor-pointer px-2 font-semibold text-gray-50;
+  }
+  .select-bg {
+    @apply hover:bg-blue-300 bg-foreground;
+  }
+  .action-accept {
+    @apply px-5 py-2.5 rounded-xl bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 hover:cursor-pointer active:bg-blue-800 focus:ring-4 focus:ring-blue-300 transition duration-200;
+  }
+  .action-decline {
+    @apply px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 font-semibold shadow-md hover:bg-gray-300 hover:cursor-pointer active:bg-gray-400 focus:ring-4 focus:ring-gray-200 transition duration-200;
+  }
+  .th-tr {
+    @apply px-2 py-2 text-left;
+  }
+  .tb-td {
+    @apply border-0 p-2 text-left border-b-2 border-b-primary;
+  }
+
+  .st-nav-hover {
+    @apply hover:bg-st-bg-m/5 rounded-lg transition-colors duration-300;
+  }
+  .st-nav-active {
+    @apply bg-st-active text-white rounded-l-lg;
+  }
 }

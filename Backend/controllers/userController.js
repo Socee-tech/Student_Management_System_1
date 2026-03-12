@@ -4,6 +4,9 @@ import Lecturer from "../models/lecturers.js";
 import Student from "../models/students.js";
 import LecturerDetails from "../models/lecturerDetails.js";
 import Grade from "../models/grades.js";
+import StudentPassword from "../models/studentPasswords.js";
+import LecturerPassword from "../models/lecturerPassword.js";
+import Department from "../models/departments.js";
 
 const Router = express.Router();
 
@@ -29,76 +32,111 @@ Router.get("/", async (req, res) => {
   }
 });
 const loginUser = async (req, res, role) => {
-  const { userName, passWord } = req.body;
+  const { email, passWord } = req.body;
   try {
-    if (!userName || !passWord) {
+    if (!email || !passWord) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-
-    const user = await userModel.findOne({ userName, passWord });
-    if (!user) {
-      return res.status(401).json({ message: "User not found" });
-    }
-    if (user.role !== role) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    if (role === "admin") {
-      return res.status(200).json({ user });
-    }
-
-    if (role === "lecturer") {
-      const lecturer = await Lecturer.findOne({ email: userName })
-        .populate("department", "name")
-        .populate("courses", "code title");
-
-      if (!lecturer) {
-        return res.status(404).json({ message: "Lecturer profile not found" });
-      }
-
-      const details = await LecturerDetails.findOne({
-        lecturer: lecturer._id,
-      })
-        .populate({
-          path: "schedule",
-          select: "code title semester year room schedule status",
-          populate: [
-            { path: "course", select: "code title" },
-            { path: "department", select: "name" },
-            { path: "lecturer", select: "name LecID" },
-          ],
-        })
-        .populate("courses", "code title");
-
-      return res.status(200).json({
-        user,
-        profile: lecturer,
-        details,
-      });
-    }
-
-    if (role === "student") {
-      const student = await Student.findOne({ email: userName }).populate(
-        "department",
-        "name"
-      );
+    if (role == "student") {
+      const student = await StudentPassword.findOne({ email });
       if (!student) {
         return res.status(404).json({ message: "Student profile not found" });
       }
-
-      const grades = await Grade.find({ student: student._id })
-        .populate("course", "code title")
-        .populate("lecturer", "name LecID")
-        .populate("department", "name");
-
-      return res.status(200).json({
-        user,
-        profile: student,
-        grades,
-      });
+      if (student.password !== passWord) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      return res
+        .status(200)
+        .json({ message: "Student logged in successfully", student });
     }
+    if (role == "lecturer") {
+      const lecturer = await LecturerPassword.findOne({ email });
+      if (!lecturer) {
+        return res.status(404).json({ message: "Lecturer profile not found" });
+      }
+      if (lecturer.password !== passWord) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      return res
+        .status(200)
+        .json({ message: "Lecturer logged in successfully", lecturer });
+    }
+    if (role == "admin") {
+      const admin = await userModel.findOne({ email, role: "admin" });
+      if (!admin) {
+        return res.status(404).json({ message: "Admin profile not found" });
+      }
+      if (admin.passWord !== passWord) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      return res
+        .status(200)
+        .json({ message: "Admin logged in successfully", admin });
+    }
+    // const user = await userModel.findOne({ email, passWord });
+    // if (!user) {
+    //   return res.status(401).json({ message: "User not found" });
+    // }
+    // if (user.role !== role) {
+    //   return res.status(403).json({ message: "Access denied" });
+    // }
 
-    return res.status(400).json({ message: "Invalid role" });
+    // if (role === "admin") {
+    //   return res.status(200).json({ user });
+    // }
+
+    // if (role === "lecturer") {
+    //   const lecturer = await Lecturer.findOne({ email: userName })
+    //     .populate("department", "name")
+    //     .populate("courses", "code title");
+
+    //   if (!lecturer) {
+    //     return res.status(404).json({ message: "Lecturer profile not found" });
+    //   }
+
+    //   const details = await LecturerDetails.findOne({
+    //     lecturer: lecturer._id,
+    //   })
+    //     .populate({
+    //       path: "schedule",
+    //       select: "code title semester year room schedule status",
+    //       populate: [
+    //         { path: "course", select: "code title" },
+    //         { path: "department", select: "name" },
+    //         { path: "lecturer", select: "name LecID" },
+    //       ],
+    //     })
+    //     .populate("courses", "code title");
+
+    //   return res.status(200).json({
+    //     user,
+    //     profile: lecturer,
+    //     details,
+    //   });
+    // }
+
+    // if (role === "student") {
+    //   const student = await Student.findOne({ email: userName }).populate(
+    //     "department",
+    //     "name"
+    //   );
+    //   if (!student) {
+    //     return res.status(404).json({ message: "Student profile not found" });
+    //   }
+
+    //   const grades = await Grade.find({ student: student._id })
+    //     .populate("course", "code title")
+    //     .populate("lecturer", "name LecID")
+    //     .populate("department", "name");
+
+    //   return res.status(200).json({
+    //     user,
+    //     profile: student,
+    //     grades,
+    //   });
+    // }
+
+    // return res.status(400).json({ message: "Invalid role" });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -166,9 +204,16 @@ Router.get("/portal/student", async (req, res) => {
       .populate("lecturer", "name LecID")
       .populate("department", "name");
 
+    const courses = await Department.findOne({
+      name: student.department.name,
+    })
+      .select("courses")
+      .populate("courses", "code title");
+
     return res.status(200).json({
       profile: student,
       grades,
+      courses,
     });
   } catch (error) {
     return res.status(500).json(error.message);

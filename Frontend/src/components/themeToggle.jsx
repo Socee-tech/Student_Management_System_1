@@ -29,7 +29,7 @@ export const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="px-3 py-1 rounded-md bg-transparent flex items-center gap-2"
+      className="px-3 py-1 rounded-md bg-transparent flex items-center gap-2 hover:bg-green-700 hover:text-white transition-colors *: duration-300"
       aria-label="Toggle theme"
     >
       {isDarkMode ? <Sun /> : <Moon />}

@@ -1,12 +1,19 @@
 import express from "express";
 import Lecturer from "../models/lecturers.js";
+import LecturerPassword from "../models/lecturerPassword.js";
 
 const Router = express.Router();
 
 Router.post("/", async (req, res) => {
   try {
     const lecturer = await Lecturer.create(req.body);
-    return res.status(201).json(lecturer);
+    const lecturerPassword = new LecturerPassword({ email: lecturer.email });
+    const savedLecturerPassword = await lecturerPassword.save();
+    return res.status(201).json({
+      lecturer,
+      lecturerPassword: savedLecturerPassword,
+      message: "Lecturer created successfully",
+    });
   } catch (error) {
     return res.status(500).json(error.message);
   }

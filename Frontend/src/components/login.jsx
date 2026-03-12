@@ -3,18 +3,13 @@ import API from "../API/axios";
 import { useState } from "react";
 import UseNotify from "../../snackBar/snackBar";
 import CircularIndeterminate from "./circularProgress";
-import {
-  GraduationCap,
-  ShieldCheck,
-  User,
-  ArrowRight,
-} from "lucide-react";
+import { GraduationCap, ShieldCheck, User, ArrowRight } from "lucide-react";
 export default function Login() {
   const { notifyError, notifySuccess } = UseNotify();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    userName: "",
+    email: "",
     passWord: "",
     role: "admin",
   });
@@ -54,7 +49,7 @@ export default function Login() {
         setLoading(false);
         localStorage.setItem(
           "portalUser",
-          JSON.stringify({ role: formData.role, email: formData.userName })
+          JSON.stringify({ role: formData.role, email: formData.email })
         );
         const target =
           formData.role === "lecturer"
@@ -65,7 +60,9 @@ export default function Login() {
         navigate(target, { state: res.data });
       }
     } catch (error) {
-      notifyError("Login failed. Please check your credentials.");
+      notifyError(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
       setLoading(false);
       console.log(error.message);
     }
@@ -150,8 +147,8 @@ export default function Login() {
               <label className="text-sm text-muted">Username</label>
               <input
                 type="text"
-                name="userName"
-                value={formData.userName}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 placeholder="e.g. name@school.edu"
                 className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"

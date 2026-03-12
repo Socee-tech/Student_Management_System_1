@@ -110,7 +110,11 @@ function StudentPage() {
 
   const stats = data?.grades
     ? [
-        { label: "Courses", value: data.grades.length || 0, icon: BookOpen },
+        {
+          label: "Courses",
+          value: data.courses.courses.length || 0,
+          icon: BookOpen,
+        },
         {
           label: "Completed",
           value: data.grades.filter((g) => g.grade).length || 0,
@@ -123,9 +127,9 @@ function StudentPage() {
     <StudentPortal
       student={data.profile}
       stats={stats}
-      courses={data?.grades?.map((g) => ({
-        code: g.course?.code || "—",
-        title: g.course?.title || "—",
+      courses={data?.courses?.courses?.slice(0, 4).map((g) => ({
+        code: g.code || "—",
+        title: g.title || "—",
         grade: g.grade || "—",
         progress: 0,
       }))}
