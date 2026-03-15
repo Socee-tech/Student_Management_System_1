@@ -1,3 +1,4 @@
+import { progress } from "framer-motion";
 import {
   Check,
   FilterXIcon,
@@ -13,6 +14,7 @@ export default function Courses() {
   const courses = [
     {
       name: "Computer Science 101",
+      description: "Introduction to computer science concepts and programming.",
       code: "CS101",
       progress: 75,
       lecturer: "Dr. Smith",
@@ -20,6 +22,8 @@ export default function Courses() {
     },
     {
       name: "Mathematics 201",
+      description:
+        "Advanced topics in mathematics including calculus and linear algebra.",
       code: "MATH201",
       progress: 50,
       lecturer: "Prof. Johnson",
@@ -27,6 +31,8 @@ export default function Courses() {
     },
     {
       name: "Physics 301",
+      description:
+        "In-depth study of classical mechanics and electromagnetism.",
       code: "PHYS301",
       progress: 20,
       lecturer: "Dr. Lee",
@@ -34,6 +40,7 @@ export default function Courses() {
     },
     {
       name: "Chemistry 101",
+      description: "Basic principles of chemistry and laboratory techniques.",
       code: "CHEM101",
       progress: 0,
       lecturer: "Dr. Brown",
@@ -41,6 +48,7 @@ export default function Courses() {
     },
     {
       name: "Biology 201",
+      description: "Study of cellular biology, genetics, and evolution.",
       code: "BIO201",
       progress: 100,
       lecturer: "Prof. Davis",
@@ -48,6 +56,7 @@ export default function Courses() {
     },
     {
       name: "History 101",
+      description: "Overview of world history from ancient to modern times.",
       code: "HIST101",
       progress: 60,
       lecturer: "Dr. Wilson",
@@ -55,6 +64,7 @@ export default function Courses() {
     },
     {
       name: "Literature 201",
+      description: "Analysis of classic and contemporary literary works.",
       code: "LIT201",
       progress: 30,
       lecturer: "Prof. Taylor",
@@ -62,6 +72,7 @@ export default function Courses() {
     },
     {
       name: "Art 101",
+      description: "Introduction to art history and various art forms.",
       code: "ART101",
       progress: 90,
       lecturer: "Dr. Anderson",
@@ -69,6 +80,7 @@ export default function Courses() {
     },
     {
       name: "Economics 201",
+      description: "Study of microeconomics and macroeconomics principles.",
       code: "ECON201",
       progress: 10,
       lecturer: "Prof. Thomas",
@@ -76,10 +88,141 @@ export default function Courses() {
     },
     {
       name: "Philosophy 101",
+      description:
+        "Introduction to philosophical thought and major philosophers.",
       code: "PHIL101",
       progress: 0,
       lecturer: "Dr. Martinez",
       status: "Not Enrolled",
+    },
+    {
+      name: "Psychology 201",
+      description: "Study of human behavior, cognition, and mental processes.",
+      code: "PSYCH201",
+      progress: 80,
+      lecturer: "Prof. Garcia",
+      status: "Enrolled",
+    },
+    {
+      name: "Sociology 101",
+      description:
+        "Examination of social structures, institutions, and interactions.",
+      code: "SOC101",
+      progress: 40,
+      lecturer: "Dr. Rodriguez",
+      status: "Enrolled",
+    },
+    {
+      name: "Political Science 201",
+      description:
+        "Analysis of political systems, theories, and international relations.",
+      code: "POLSCI201",
+      progress: 70,
+      lecturer: "Prof. Martinez",
+      status: "Enrolled",
+    },
+    {
+      name: "Environmental Science 101",
+      description: "Study of environmental issues and sustainable practices.",
+      code: "ENV101",
+      progress: 50,
+      lecturer: "Dr. Hernandez",
+      status: "Enrolled",
+    },
+    {
+      name: "Business 201",
+      description:
+        "Introduction to business principles and management strategies.",
+      code: "BUS201",
+      progress: 20,
+      lecturer: "Prof. Clark",
+      status: "Enrolled",
+    },
+    {
+      name: "Engineering 101",
+      description: "Overview of engineering disciplines and design processes.",
+      code: "ENG101",
+      progress: 0,
+      lecturer: "Dr. Lewis",
+      status: "Not Enrolled",
+    },
+    {
+      name: "Medicine 201",
+      description: "Study of human anatomy, physiology, and medical practices.",
+      code: "MED201",
+      progress: 90,
+      lecturer: "Prof. Walker",
+      status: "Enrolled",
+    },
+    {
+      name: "Law 101",
+      description:
+        "Introduction to legal systems, principles, and case studies.",
+      code: "LAW101",
+      progress: 60,
+      lecturer: "Dr. Hall",
+      status: "Enrolled",
+    },
+    {
+      name: "Music 201",
+      description: "Study of music theory, history, and performance.",
+      code: "MUSIC201",
+      progress: 30,
+      lecturer: "Prof. Allen",
+      status: "Enrolled",
+    },
+    {
+      name: "Theater 101",
+      description: "Introduction to theater arts, acting, and production.",
+      code: "THEATER101",
+      progress: 80,
+      lecturer: "Dr. Young",
+      status: "Enrolled",
+    },
+    {
+      name: "Computer Science 201",
+      description:
+        "Advanced programming concepts, data structures, and algorithms.",
+      code: "CS201",
+      progress: 50,
+      lecturer: "Dr. Smith",
+      status: "Enrolled",
+    },
+    {
+      name: "Mathematics 301",
+      description:
+        "Specialized topics in mathematics such as topology and number theory.",
+      code: "MATH301",
+      progress: 20,
+      lecturer: "Prof. Johnson",
+      status: "Enrolled",
+    },
+    {
+      name: "Physics 401",
+      description:
+        "Advanced study of quantum mechanics, relativity, and particle physics.",
+      code: "PHYS401",
+      progress: 0,
+      lecturer: "Dr. Lee",
+      status: "Not Enrolled",
+    },
+    {
+      name: "Chemistry 201",
+      description:
+        "In-depth study of organic chemistry, reactions, and synthesis.",
+      code: "CHEM201",
+      progress: 100,
+      lecturer: "Dr. Brown",
+      status: "Completed",
+    },
+    {
+      name: "Biology 301",
+      description:
+        "Advanced topics in biology including molecular biology and ecology.",
+      code: "BIO301",
+      progress: 70,
+      lecturer: "Prof. Davis",
+      status: "Enrolled",
     },
   ];
   return (
@@ -133,6 +276,9 @@ export default function Courses() {
                       ></div>
                     </div>
                     <div className="text-muted">{course.lecturer}</div>
+                    <div className="text-muted text-sm">
+                      {course.description}
+                    </div>
                   </div>
                 </td>
                 <td className="text-center">
