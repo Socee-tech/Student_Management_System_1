@@ -132,8 +132,11 @@ export default function Dashboard({ setActiveTab }) {
                   <td className="p-2">{crs.code}</td>
                   <td className="p-2">{crs.name}</td>
                   <td className="p-2">{crs.lecturer}</td>
-                  <td>
-                    <button className="border border-gray-400 rounded hover:bg-green-700 transition-all duration-200 hover:text-white hover:scale-102 p-1 flex space-x-0.5 m-0.5">
+                  <td className="hidden md:flex">
+                    <button
+                      onClick={() => setActiveTab("Courses")}
+                      className="border border-gray-400 rounded hover:bg-green-700 transition-all duration-200 hover:text-white hover:scale-102 p-1 flex space-x-0.5 m-0.5"
+                    >
                       View <Link size={15} className="pt-1" />
                     </button>
                   </td>

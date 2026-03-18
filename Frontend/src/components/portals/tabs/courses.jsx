@@ -1,4 +1,3 @@
-import { progress } from "framer-motion";
 import {
   Check,
   FilterXIcon,
@@ -44,7 +43,7 @@ export default function Courses() {
       code: "CHEM101",
       progress: 0,
       lecturer: "Dr. Brown",
-      status: "Not Enrolled",
+      status: "Unenrolled",
     },
     {
       name: "Biology 201",
@@ -93,7 +92,7 @@ export default function Courses() {
       code: "PHIL101",
       progress: 0,
       lecturer: "Dr. Martinez",
-      status: "Not Enrolled",
+      status: "Unenrolled",
     },
     {
       name: "Psychology 201",
@@ -144,7 +143,7 @@ export default function Courses() {
       code: "ENG101",
       progress: 0,
       lecturer: "Dr. Lewis",
-      status: "Not Enrolled",
+      status: "Unenrolled",
     },
     {
       name: "Medicine 201",
@@ -169,7 +168,7 @@ export default function Courses() {
       code: "MUSIC201",
       progress: 30,
       lecturer: "Prof. Allen",
-      status: "Enrolled",
+      status: "Unenrolled",
     },
     {
       name: "Theater 101",
@@ -204,7 +203,7 @@ export default function Courses() {
       code: "PHYS401",
       progress: 0,
       lecturer: "Dr. Lee",
-      status: "Not Enrolled",
+      status: "Unenrolled",
     },
     {
       name: "Chemistry 201",
@@ -236,7 +235,7 @@ export default function Courses() {
           </button>
         </div>
       </div>
-      <div className="rounded-xl bg-st-bg p-1 md:p-2 transition-all duration-600">
+      <div className="rounded-xl bg-st-bg p-1 md:p-2 transition-all duration-600 w-full">
         <div className="flex justify-between border-b border-gray-400 pb-0.5">
           <div className="flex">
             <Search className="text-muted mt-1.5" />
@@ -263,7 +262,7 @@ export default function Courses() {
             {courses.map((course) => (
               <tr key={course.code}>
                 <td className="p-2 flex">
-                  <div className="mr-2">
+                  <div className="mr-2 hidden md:flex">
                     <Image className="h-full w-full" />
                   </div>
                   <div className="flex-1">
@@ -281,9 +280,9 @@ export default function Courses() {
                     </div>
                   </div>
                 </td>
-                <td className="text-center">
+                <td className="text-center pt-0">
                   <span
-                    className={`text-sm p-1.5 rounded-xl ${
+                    className={`text-sm p-1.5 rounded-xl mt-0 ${
                       course.status === "Completed"
                         ? "bg-green-200/10 text-green-800"
                         : course.status === "Enrolled"

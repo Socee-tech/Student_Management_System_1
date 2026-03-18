@@ -53,10 +53,10 @@ export default function StudentPortal() {
           <Navigations setActiveTab={setActiveTab} activeTab={activeTab} />
         </aside>
         {/* middle screen */}
-        <div className="col-span-10 md:col-span-6 bg-st-bg-m h-screen rounded-2xl transition-all duration-600 scroll-smooth overflow-y-auto overflow-x-auto [scrollbar-width-none] [&::-webkit-scrollbar]:hidden">
+        <div className="col-span-10 md:col-span-6 bg-st-bg-m h-screen rounded-2xl transition-all duration-600 scroll-smooth overflow-y-auto [scrollbar-width-none] [&::-webkit-scrollbar]:hidden">
           <div className="flex bg-gray-500 m-2 ml-5 mr-5 rounded-lg p-2 hover:cursor-pointer md:mt-8 text-white">
             <Search size={20} className="ml-2" />
-            <input type="text" placeholder="search" className="ml-2" />
+            <input type="text" placeholder="search" className="ml-2 focus:outline-none" />
           </div>
           {/* Tabs */}
           {activeTab === "Dashboard" && (
