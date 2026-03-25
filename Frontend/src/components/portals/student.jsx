@@ -11,6 +11,8 @@ import Grades from "./tabs/grades";
 import Events from "./tabs/events";
 import Classes from "./tabs/classes";
 import Notices from "./tabs/notices";
+import Profile from "./profile";
+import Transcript from "./transcript";
 
 export default function StudentPortal() {
   const [selected, setSelected] = useState(new Date());
@@ -56,7 +58,11 @@ export default function StudentPortal() {
         <div className="col-span-10 md:col-span-6 bg-st-bg-m h-screen rounded-2xl transition-all duration-600 scroll-smooth overflow-y-auto [scrollbar-width-none] [&::-webkit-scrollbar]:hidden">
           <div className="flex bg-gray-500 m-2 ml-5 mr-5 rounded-lg p-2 hover:cursor-pointer md:mt-8 text-white">
             <Search size={20} className="ml-2" />
-            <input type="text" placeholder="search" className="ml-2 focus:outline-none" />
+            <input
+              type="text"
+              placeholder="search"
+              className="ml-2 focus:outline-none"
+            />
           </div>
           {/* Tabs */}
           {activeTab === "Dashboard" && (
@@ -67,6 +73,8 @@ export default function StudentPortal() {
           {activeTab === "Events" && <Events />}
           {activeTab === "Classes" && <Classes />}
           {activeTab === "Notices" && <Notices />}
+          {activeTab === "Profile" && <Profile />}
+          {activeTab === "Transcript" && <Transcript />}
         </div>
         {/* Right screen */}
         <div className="col-span-2 bg-st-bg h-screen flex-col hidden md:flex transition-all duration-600 scroll-smooth overflow-y-auto">

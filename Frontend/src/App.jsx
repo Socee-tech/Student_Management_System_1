@@ -143,7 +143,6 @@ function App() {
     <>
       <Routes>
         <Route index element={<Login />} />
-
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/lecturer" element={<LecturerPage />} />
         <Route path="/student" element={<StudentPage />} />
